@@ -1,0 +1,1 @@
+../../../../Pod/Classes/HRSSectionController/HRSTableViewSectionCoordinator+IndexPathMapping.h

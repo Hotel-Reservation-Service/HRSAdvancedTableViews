@@ -1,0 +1,10 @@
+target 'HRSAdvancedTableViews', :exclusive => true do
+  pod "HRSAdvancedTableViews", :path => "../"
+end
+
+target 'Tests', :exclusive => true do
+  pod "HRSAdvancedTableViews", :path => "../"
+
+  pod 'Expecta'
+  pod 'OCMock'
+end
