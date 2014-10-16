@@ -1,9 +1,9 @@
 # HRSAdvancedTableViews
 
-<!-- [![CI Status](http://img.shields.io/travis/Hotel-Reservation-Service/HRSAdvancedTableViews.svg?style=flat)](https://travis-ci.org/Hotel-Reservation-Service/HRSAdvancedTableViews) -->
-[![Version](https://img.shields.io/cocoapods/v/HRSAdvancedTableViews.svg?style=flat)](http://cocoadocs.org/docsets/HRSAdvancedTableViews)
-[![License](https://img.shields.io/cocoapods/l/HRSAdvancedTableViews.svg?style=flat)](http://cocoadocs.org/docsets/HRSAdvancedTableViews)
-[![Platform](https://img.shields.io/cocoapods/p/HRSAdvancedTableViews.svg?style=flat)](http://cocoadocs.org/docsets/HRSAdvancedTableViews)
+[![CI Status](http://img.shields.io/travis/Hotel-Reservation-Service/HRSAdvancedTableViews.svg?style=flat-square)](https://travis-ci.org/Hotel-Reservation-Service/HRSAdvancedTableViews)
+[![Version](https://img.shields.io/cocoapods/v/HRSAdvancedTableViews.svg?style=flat-square)](http://cocoadocs.org/docsets/HRSAdvancedTableViews)
+[![License](https://img.shields.io/cocoapods/l/HRSAdvancedTableViews.svg?style=flat-square)](http://cocoadocs.org/docsets/HRSAdvancedTableViews)
+[![Platform](https://img.shields.io/cocoapods/p/HRSAdvancedTableViews.svg?style=flat-square)](http://cocoadocs.org/docsets/HRSAdvancedTableViews)
 
 The Advanced Table Views library is a set of modules that make handling table views more convenient. The different modules are split into cocoapods subspecs so that you can only include the modules you are interested in. Some of the modules (like `HRSIndexPathMapping`) have advantages that might also be useful for other tasks than just table views, however they are mainly designed for the work with table views.
 
