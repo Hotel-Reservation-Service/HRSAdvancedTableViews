@@ -78,12 +78,12 @@
 @property (nonatomic, strong, readonly) UITableView *tableView;
 
 /**
- *  The section header title of the controlled section
+ The section header title of the controlled section
  */
 @property (nonatomic, strong, readwrite) NSString *sectionHeaderTitle;
 
 /**
- *  The section footer title of the controlled section
+ The section footer title of the controlled section
  */
 @property (nonatomic, strong, readwrite) NSString *sectionFooterTitle;
 
