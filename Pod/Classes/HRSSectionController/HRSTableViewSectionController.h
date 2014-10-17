@@ -54,10 +54,14 @@
  purpose.
  
  @discussion Typically you will configure the table view here to be ready to use.
+ 
+ @param tableView The table view that is now assigned to the section coordinator
+                  and its controllers.
  */
 - (void)tableViewDidChange:(UITableView *)tableView;
 
 @end
+
 
 /**
  This is a base implementation of the `HRSTableViewSectionController` protocol
@@ -70,20 +74,42 @@
  */
 @interface HRSTableViewSectionController : UIResponder <HRSTableViewSectionController>
 
+/**
+ Called after the coordinator was assigned a new table view.
+ 
+ The default implementation populates the `tableView` property of the controller.
+ 
+ @note make sure to call super when subclassing to not break this behaviour!
+ 
+ @param tableView The table view that is now assigned to the section coordinator
+                  and its controllers.
+ */
 - (void)tableViewDidChange:(UITableView *)tableView NS_REQUIRES_SUPER;
 
 /**
  The table view that this section controller is responsible for.
+ 
+ This property will return `nil` until `tableViewDidChange:` was called.
  */
 @property (nonatomic, strong, readonly) UITableView *tableView;
 
 /**
- *  The section header title of the controlled section
+ The section header title of the controlled section.
+ 
+ This title will automatically be set as the table view section's header title.
+ 
+ @note You must not override the table view data source's
+       `tableView:titleForHeaderInSection:` for this to work.
  */
 @property (nonatomic, strong, readwrite) NSString *sectionHeaderTitle;
 
 /**
- *  The section footer title of the controlled section
+ The section footer title of the controlled section.
+ 
+ This title will automatically be set as the table view section's footer title.
+ 
+ @note You must not override the table view data source's
+       `tableView:titleForFooterInSection:` for this to work.
  */
 @property (nonatomic, strong, readwrite) NSString *sectionFooterTitle;
 

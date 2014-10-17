@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "HRSAdvancedTableViews"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "HRSAdvancedTableViews is a collection of useful table view additions, split into several subspecs."
   s.description      = <<-DESC
                        The Advanced Table Views library is a set of modules that make handling table views more convenient. The different modules are split into cocoapods subspecs so that you can only include the modules you are interested in. Some of the modules (like `HRSIndexPathMapping`) have advantages that might also be useful for other tasks than just table views, however they are mainly designed for the work with table views.
