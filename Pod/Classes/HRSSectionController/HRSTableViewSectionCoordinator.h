@@ -129,6 +129,19 @@
  */
 - (UITableView *)tableViewForSectionController:(id<HRSTableViewSectionController>)controller;
 
+/**
+ Returns a section controller proxy for the given section.
+ 
+ This enables you to make calls to the section controller with the index paths
+ of the table view's space.
+ 
+ @note Do not make decisions based on pointer equality. This is not the same
+       object as the table view.
+ 
+ @param section The table view's section you want the controller for.
+ 
+ @return a section controller proxy
+ */
 - (id<HRSTableViewSectionController>)sectionControllerForTableSection:(NSInteger)section;
 
 @end
