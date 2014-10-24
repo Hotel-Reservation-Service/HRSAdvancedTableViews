@@ -18,7 +18,8 @@
 @interface HRSIndexPathMapperNode ()
 
 @property (nonatomic, assign, readwrite) NSUInteger index;
-@property (nonatomic, copy, readwrite) BOOL(^condition)(void);
+@property (nonatomic, strong, readwrite) NSPredicate *predicate;
+@property (nonatomic, weak, readwrite) id evaluationObject;
 
 @property (nonatomic, assign, readonly, getter=isLeaf) BOOL leaf;
 
@@ -27,11 +28,10 @@
 
 @implementation HRSIndexPathMapperNode
 
-- (instancetype)initWithIndex:(NSUInteger)index condition:(BOOL(^)(void))condition {
+- (instancetype)initWithIndex:(NSUInteger)index {
 	self = [super init];
 	if (self) {
 		_index = index;
-		_condition = [condition copy];
 		_children = [NSArray array];
 	}
 	return self;
@@ -45,23 +45,30 @@
 
 #pragma mark - configuration
 
-- (void)setConditionForIndexes:(NSUInteger *)indexes depth:(NSUInteger)depth condition:(BOOL(^)(void))condition {
+- (void)setConditionForIndexes:(NSUInteger *)indexes depth:(NSUInteger)depth predicate:(NSPredicate *)predicate evaluationObject:(id)object {
+	NSParameterAssert(predicate);
+	NSParameterAssert(object);
+	if (predicate == nil || object == nil) {
+		return;
+	}
+	
 	NSUInteger objectIndex = [self.children indexOfObjectPassingTest:^BOOL(HRSIndexPathMapperNode *child, NSUInteger idx, BOOL *stop) {
 		return (child.index == indexes[0]);
 	}];
 	
 	HRSIndexPathMapperNode *child;
 	if (objectIndex == NSNotFound) {
-		child = [[HRSIndexPathMapperNode alloc] initWithIndex:indexes[0] condition:NULL];
+		child = [[HRSIndexPathMapperNode alloc] initWithIndex:indexes[0]];
 		NSArray *children = [[self.children arrayByAddingObject:child] sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"index" ascending:YES] ]];
 		self.children = children;
 	} else {
 		child = self.children[objectIndex];
 	}
 	if (depth > 1) {
-		[child setConditionForIndexes:&indexes[1] depth:--depth condition:condition];
+		[child setConditionForIndexes:&indexes[1] depth:--depth predicate:predicate evaluationObject:object];
 	} else {
-		child.condition = condition;
+		child.predicate = predicate;
+		child.evaluationObject = object;
 	}
 }
 
@@ -82,7 +89,8 @@
 		[children removeObjectAtIndex:objectIndex];
 		self.children = [NSArray arrayWithArray:children];
 	} else {
-		child.condition = NULL;
+		child.predicate = nil;
+		child.evaluationObject = nil;
 	}
 }
 
@@ -99,12 +107,12 @@
 	// TODO: We could introduce a short path for NSNotFound here if we are able to find the right node in O(1).
 	[self.children enumerateObjectsUsingBlock:^(HRSIndexPathMapperNode *child, NSUInteger idx, BOOL *stop) {
 		if (child.index < staticIndex) {
-			BOOL visible = (child.condition ? child.condition() : YES);
+			BOOL visible = (child.predicate ? [child.predicate evaluateWithObject:child.evaluationObject] : YES);
 			if (visible == NO) {
 				dynamicIndex--;
 			}
 		} else if (child.index == staticIndex) {
-			BOOL visible = (child.condition ? child.condition() : YES);
+			BOOL visible = (child.predicate ? [child.predicate evaluateWithObject:child.evaluationObject] : YES);
 			if (visible == NO) {
 				dynamicIndex = NSNotFound;
 			}
@@ -138,7 +146,7 @@
 	
 	[self.children enumerateObjectsUsingBlock:^(HRSIndexPathMapperNode *child, NSUInteger idx, BOOL *stop) {
 		if (child.index <= staticIndex) {
-			BOOL visible = (child.condition ? child.condition() : YES);
+			BOOL visible = (child.predicate ? [child.predicate evaluateWithObject:child.evaluationObject] : YES);
 			if (visible == NO) {
 				staticIndex++;
 			} else if (child.index == staticIndex) {
@@ -157,4 +165,36 @@
 	}
 }
 
+
+
+#pragma mark - DEPRECATED
+
+- (instancetype)initWithIndex:(NSUInteger)index condition:(BOOL(^)(void))condition {
+	self = [super init];
+	if (self) {
+		_index = index;
+		_children = [NSArray array];
+		
+		if (condition != NULL) {
+			_predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+				return condition();
+			}];
+		}
+	}
+	return self;
+}
+
+- (void)setConditionForIndexes:(NSUInteger *)indexes depth:(NSUInteger)depth condition:(BOOL(^)(void))condition {
+	NSPredicate *predicate;
+	if (condition == NULL) {
+		predicate = [NSPredicate predicateWithValue:YES];
+	} else {
+		predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+			return condition();
+		}];
+	}
+	[self setConditionForIndexes:indexes depth:depth predicate:predicate evaluationObject:self];
+}
+
 @end
+

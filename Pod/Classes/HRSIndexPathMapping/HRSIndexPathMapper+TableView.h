@@ -47,6 +47,8 @@
  */
 - (void)setConditionForSection:(NSInteger)section condition:(BOOL(^)(void))condition;
 
+- (void)setConditionForSection:(NSInteger)section predicate:(NSPredicate *)predicate evaluationObject:(id)object;
+
 /**
  Removes the condition for the given section.
  
@@ -80,6 +82,8 @@
                   visibility status of this row.
  */
 - (void)setConditionForRow:(NSInteger)row inSection:(NSInteger)section condition:(BOOL(^)(void))condition;
+
+- (void)setConditionForRow:(NSInteger)row inSection:(NSInteger)section predicate:(NSPredicate *)predicate evaluationObject:(id)object;
 
 /**
  Removes the condition for the given row in the passed-in section.

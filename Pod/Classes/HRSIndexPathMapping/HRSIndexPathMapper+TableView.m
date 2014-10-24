@@ -16,9 +16,17 @@
 
 @implementation HRSIndexPathMapper (TableView)
 
+
+#pragma mark - section conditions
+
 - (void)setConditionForSection:(NSInteger)section condition:(BOOL(^)(void))condition {
 	NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:section];
 	[self setConditionForIndexPath:indexPath condition:condition];
+}
+
+- (void)setConditionForSection:(NSInteger)section predicate:(NSPredicate *)predicate evaluationObject:(id)object {
+	NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:section];
+	[self setConditionForIndexPath:indexPath predicate:predicate evaluationObject:object];
 }
 
 - (void)removeConditionForSection:(NSInteger)section includingRows:(BOOL)rows {
@@ -26,15 +34,28 @@
 	[self removeConditionForIndexPath:indexPath descendant:rows];
 }
 
+
+
+#pragma mark - row conditions
+
 - (void)setConditionForRow:(NSInteger)row inSection:(NSInteger)section condition:(BOOL(^)(void))condition {
 	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
 	[self setConditionForIndexPath:indexPath condition:condition];
+}
+
+- (void)setConditionForRow:(NSInteger)row inSection:(NSInteger)section predicate:(NSPredicate *)predicate evaluationObject:(id)object {
+	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+	[self setConditionForIndexPath:indexPath predicate:predicate evaluationObject:object];
 }
 
 - (void)removeConditionForRow:(NSInteger)row inSection:(NSInteger)section {
 	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
 	[self removeConditionForIndexPath:indexPath descendant:YES];
 }
+
+
+
+#pragma mark - evaluation
 
 - (NSInteger)dynamicSectionForStaticSection:(NSInteger)section {
 	NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:section];

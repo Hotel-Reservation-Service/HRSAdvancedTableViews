@@ -70,6 +70,8 @@
  */
 - (void)setConditionForIndexPath:(NSIndexPath *)indexPath condition:(BOOL(^)(void))condition;
 
+- (void)setConditionForIndexPath:(NSIndexPath *)indexPath predicate:(NSPredicate *)predicate evaluationObject:(id)object;
+
 /**
  Remove a condition for a given index path.
  

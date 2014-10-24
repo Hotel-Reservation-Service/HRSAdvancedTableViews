@@ -52,7 +52,8 @@
  
  @return An initialized node object
  */
-- (instancetype)initWithIndex:(NSUInteger)index condition:(BOOL(^)(void))condition NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithIndex:(NSUInteger)index condition:(BOOL(^)(void))condition DEPRECATED_ATTRIBUTE NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithIndex:(NSUInteger)index NS_DESIGNATED_INITIALIZER;
 
 /**
  Sets a condition for the given indexes by creating a child (if not present) for
@@ -68,7 +69,9 @@
  @param depth     The number of indexes in the list.
  @param condition The condition that should be set to the last index in the list.
  */
-- (void)setConditionForIndexes:(NSUInteger *)indexes depth:(NSUInteger)depth condition:(BOOL(^)(void))condition;
+- (void)setConditionForIndexes:(NSUInteger *)indexes depth:(NSUInteger)depth condition:(BOOL(^)(void))condition DEPRECATED_ATTRIBUTE;
+
+- (void)setConditionForIndexes:(NSUInteger *)indexes depth:(NSUInteger)depth predicate:(NSPredicate *)predicate evaluationObject:(id)object;
 
 /**
  Removes a condition for the given indexes by traversing through the child
