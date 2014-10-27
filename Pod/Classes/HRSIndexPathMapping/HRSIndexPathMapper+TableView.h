@@ -29,8 +29,8 @@
 @interface HRSIndexPathMapper (TableView)
 
 /**
- Sets a condition for the given section while overwriting possible previous
- conditions.
+ Sets a block condition for the given section while overwriting possible
+ previous conditions.
  
  This is a convenience method for working with `UITableView`s. You use this
  method when controlling a complete section. If the condition returns `NO`, the
@@ -41,12 +41,33 @@
  first case, a possible table section header or footer title is not visible,
  whereas in the second case, the titles remain visible with no cell between them.
  
+ @see setConditionForIndexPath:condition:
+ 
  @param section   The section you want to add a condition to.
  @param condition The condition block that should be evaluated to determine the
                   visibility status of this section.
  */
 - (void)setConditionForSection:(NSInteger)section condition:(BOOL(^)(void))condition;
 
+/**
+ Sets a predicate condition for the given section while overwriting possible
+ previous conditions.
+ 
+ This is a convenience method for working with `UITableView`s. You use this
+ method when controlling a complete section. If the condition returns `NO`, the
+ complete section is not visible inside the table view.
+ 
+ This behavior is different from adding an appropriate condition to each row for
+ a section, where the section is still visible but has no visible rows. In the
+ first case, a possible table section header or footer title is not visible,
+ whereas in the second case, the titles remain visible with no cell between them.
+ 
+ @see setConditionForIndexPath:predicate:evaluationObject:
+ 
+ @param section   The section you want to add a condition to.
+ @param predicate The predicate that describes the condition.
+ @param object    The object the predicate should be evaluated on.
+ */
 - (void)setConditionForSection:(NSInteger)section predicate:(NSPredicate *)predicate evaluationObject:(id)object;
 
 /**
@@ -69,12 +90,14 @@
 - (void)removeConditionForSection:(NSInteger)section includingRows:(BOOL)rows;
 
 /**
- Sets a condition for the given row in the passed-in section while overwriting
- possible previous conditions for this row.
+ Sets a block condition for the given row in the passed-in section while
+ overwriting possible previous conditions for this row.
  
  This is a convenience method for working with `UITableView`s. You use this
  method when controlling a specific row. If the condition returns `NO`, the row
  in the specified section is not visible inside the table view.
+ 
+ @see setConditionForIndexPath:condition:
  
  @param row       The row you want to add a condition to.
  @param section   The section of the row in question.
@@ -83,6 +106,21 @@
  */
 - (void)setConditionForRow:(NSInteger)row inSection:(NSInteger)section condition:(BOOL(^)(void))condition;
 
+/**
+ Sets a predicate condition for the given row in the passed-in section while
+ overwriting possible previous conditions for this row.
+ 
+ This is a convenience method for working with `UITableView`s. You use this
+ method when controlling a specific row. If the condition returns `NO`, the row
+ in the specified section is not visible inside the table view.
+ 
+ @see setConditionForIndexPath:predicate:evaluationObject:
+ 
+ @param row       The row you want to add a condition to.
+ @param section   The section of the row in question.
+ @param predicate The predicate that describes the condition.
+ @param object    The object the predicate should be evaluated on.
+ */
 - (void)setConditionForRow:(NSInteger)row inSection:(NSInteger)section predicate:(NSPredicate *)predicate evaluationObject:(id)object;
 
 /**
