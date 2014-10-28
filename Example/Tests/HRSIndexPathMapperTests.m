@@ -110,7 +110,7 @@
 }
 
 - (void)testEvaluationObject {
-	NSMutableDictionary *person = [NSMutableDictionary dictionary];
+	NS_VALID_UNTIL_END_OF_SCOPE NSMutableDictionary *person = [NSMutableDictionary dictionary];
 	person[@"name"] = @"John Appleseed";
 	person[@"age"] = @32;
 	
@@ -128,8 +128,6 @@
 	NSIndexPath *foundIndexPath = [self.sut dynamicIndexPathForStaticIndexPath:indexPath];
 	expect([foundIndexPath indexAtPosition:0]).to.equal(0);
 	expect([foundIndexPath indexAtPosition:1]).to.equal(0);
-	
-	expect(person).toNot.beNil(); // just to make arc happy and keep this object around
 }
 
 @end
