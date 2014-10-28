@@ -40,9 +40,7 @@
 
 - (void)setConditionForIndexPath:(NSIndexPath *)indexPath condition:(BOOL(^)(void))condition {
 	NSPredicate *predicate;
-	if (condition == NULL) {
-		predicate = [NSPredicate predicateWithValue:YES];
-	} else {
+	if (condition != NULL) {
 		predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
 			return condition();
 		}];
@@ -52,8 +50,8 @@
 }
 
 - (void)setConditionForIndexPath:(NSIndexPath *)indexPath predicate:(NSPredicate *)predicate evaluationObject:(id)object {
-	NSParameterAssert(predicate);
 	if (predicate == nil) {
+		[self removeConditionForIndexPath:indexPath descendant:NO];
 		return;
 	}
 	NSParameterAssert(object);

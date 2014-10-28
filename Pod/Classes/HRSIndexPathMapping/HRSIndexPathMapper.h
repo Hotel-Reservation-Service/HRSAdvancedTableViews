@@ -84,6 +84,14 @@
  path evaluation. You can pass in any object that responds to the key path / key
  paths you specified in your predicate.
  
+ @note If the predicate is nil, this method behaves as
+       `removeConditionForIndexPath:descendant:` with the descendant parameter
+       set to `NO`.
+ 
+ @note If you specify a predicate, you need to specify an evaluation object as
+	   well. If you do not do this, this is considered an API misuse and the
+       behavior is undefined.
+ 
  @see -[NSPredicate evaluateWithObject:]
  
  @param indexPath The index path the condition belongs to.
