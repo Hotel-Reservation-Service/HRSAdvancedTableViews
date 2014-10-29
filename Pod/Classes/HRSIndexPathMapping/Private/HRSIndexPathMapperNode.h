@@ -52,7 +52,18 @@
  
  @return An initialized node object
  */
-- (instancetype)initWithIndex:(NSUInteger)index condition:(BOOL(^)(void))condition NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithIndex:(NSUInteger)index condition:(BOOL(^)(void))condition DEPRECATED_ATTRIBUTE NS_DESIGNATED_INITIALIZER;
+
+/**
+ Create a new node with the given index.
+ 
+ This is the designated initializer.
+ 
+ @param index     The index the node represents.
+ 
+ @return An initialized node object
+ */
+- (instancetype)initWithIndex:(NSUInteger)index NS_DESIGNATED_INITIALIZER;
 
 /**
  Sets a condition for the given indexes by creating a child (if not present) for
@@ -62,13 +73,33 @@
  If this method is called with only one index left in the list (meaning the
  depth parameter is 1), it will set the condition.
  
+ @deprecated In favor of setConditionForIndexes:depth:predicate:evaluationObject:
+ 
  @param indexes   A pointer to a list of indexes that represent the remaining
                   indexes of the index path from the receiver's node to the
                   leaf.
  @param depth     The number of indexes in the list.
  @param condition The condition that should be set to the last index in the list.
  */
-- (void)setConditionForIndexes:(NSUInteger *)indexes depth:(NSUInteger)depth condition:(BOOL(^)(void))condition;
+- (void)setConditionForIndexes:(NSUInteger *)indexes depth:(NSUInteger)depth condition:(BOOL(^)(void))condition DEPRECATED_ATTRIBUTE;
+
+/**
+ Sets a condition for the given indexes by creating a child (if not present) for
+ the next index in the index list and calling this method recursively by
+ removing the first index from the indexes list and decrementing the depth by 1.
+ 
+ If this method is called with only one index left in the list (meaning the
+ depth parameter is 1), it will set the condition's predicate and evaluation
+ object.
+ 
+ @param indexes   A pointer to a list of indexes that represent the remaining
+                  indexes of the index path from the receiver's node to the
+                  leaf.
+ @param depth     The number of indexes in the list.
+ @param predicate The predicate that describes the condition.
+ @param object    The object the predicate should be evaluated on.
+ */
+- (void)setConditionForIndexes:(NSUInteger *)indexes depth:(NSUInteger)depth predicate:(NSPredicate *)predicate evaluationObject:(id)object;
 
 /**
  Removes a condition for the given indexes by traversing through the child

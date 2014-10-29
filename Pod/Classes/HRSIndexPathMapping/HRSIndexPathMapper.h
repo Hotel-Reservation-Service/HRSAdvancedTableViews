@@ -54,8 +54,8 @@
 @interface HRSIndexPathMapper : NSObject
 
 /**
- Sets a condition for a given index path while overwriting possible previous
- conditions.
+ Sets a block condition for a given index path while overwriting possible
+ previous conditions.
  
  You specify the index path as generic as possible. For example if your data
  structure has index pathes '0-0', '0-1', '1-0', '1-1', '1-2' and you want to hide
@@ -69,6 +69,36 @@
                   if it should be skipped.
  */
 - (void)setConditionForIndexPath:(NSIndexPath *)indexPath condition:(BOOL(^)(void))condition;
+
+/**
+ Sets a predicate condition for a given index path while overwriting possible
+ previous conditions.
+ 
+ You specify the index path as generic as possible. For example if your data
+ structure has index pathes '0-0', '0-1', '1-0', '1-1', '1-2' and you want to hide
+ all the index pathes whoes first index is 1, it is enough to have a condition
+ set for index path '1'. If this condition would return NO, this would result in
+ the following list: '0-0', '0-1'.
+ 
+ The predicate is evaluated on a specific object that is the root of the key
+ path evaluation. You can pass in any object that responds to the key path / key
+ paths you specified in your predicate.
+ 
+ @note If the predicate is nil, this method behaves as
+       `removeConditionForIndexPath:descendant:` with the descendant parameter
+       set to `NO`.
+ 
+ @note If you specify a predicate, you need to specify an evaluation object as
+	   well. If you do not do this, this is considered an API misuse and the
+       behavior is undefined.
+ 
+ @see -[NSPredicate evaluateWithObject:]
+ 
+ @param indexPath The index path the condition belongs to.
+ @param predicate The predicate that describes the condition.
+ @param object    The object the predicate should be evaluated on.
+ */
+- (void)setConditionForIndexPath:(NSIndexPath *)indexPath predicate:(NSPredicate *)predicate evaluationObject:(id)object;
 
 /**
  Remove a condition for a given index path.
