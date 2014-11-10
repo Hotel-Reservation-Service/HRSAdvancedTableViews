@@ -1,1 +1,0 @@
-../../../../Pod/Classes/HRSSectionController/Private/_HRSTableViewSectionCoordinatorProxy.h
