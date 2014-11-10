@@ -31,7 +31,9 @@ In practice, this is used to collapse or hide a couple of rows or sections insid
 
 `HRSAdvancedTableViews` is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your Podfile if you want to install all of the modules:
 
-    pod "HRSAdvancedTableViews"
+    pod "HRSAdvancedTableViews", "~> 0.1"
+
+Please note that we version our releases based on [Semantic Versioning](http://semver.org), so it is save to advice cocoapods to use every minor and patch version within a major version.
 
 If you only want to install a specific module, use one of the following lines:
 
