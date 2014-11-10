@@ -109,4 +109,25 @@
 	expect([notFoundMapped indexAtPosition:1]).to.equal(NSNotFound);
 }
 
+- (void)testEvaluationObject {
+	NS_VALID_UNTIL_END_OF_SCOPE NSMutableDictionary *person = [NSMutableDictionary dictionary];
+	person[@"name"] = @"John Appleseed";
+	person[@"age"] = @32;
+	
+	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"age > 32"];
+	
+	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+	[self.sut setConditionForIndexPath:indexPath predicate:predicate evaluationObject:person];
+	
+	NSIndexPath *notFoundIndexPath = [self.sut dynamicIndexPathForStaticIndexPath:indexPath];
+	expect([notFoundIndexPath indexAtPosition:0]).to.equal(0);
+	expect([notFoundIndexPath indexAtPosition:1]).to.equal(NSNotFound);
+	
+	person[@"age"] = @33; // grow old
+	
+	NSIndexPath *foundIndexPath = [self.sut dynamicIndexPathForStaticIndexPath:indexPath];
+	expect([foundIndexPath indexAtPosition:0]).to.equal(0);
+	expect([foundIndexPath indexAtPosition:1]).to.equal(0);
+}
+
 @end

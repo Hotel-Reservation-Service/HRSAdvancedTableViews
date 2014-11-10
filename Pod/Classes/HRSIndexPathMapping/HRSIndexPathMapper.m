@@ -29,7 +29,7 @@
 - (instancetype)init {
 	self = [super init];
 	if (self) {
-		_root = [[HRSIndexPathMapperNode alloc] initWithIndex:0 condition:NULL];
+		_root = [[HRSIndexPathMapperNode alloc] initWithIndex:0];
 	}
 	return self;
 }
@@ -39,10 +39,30 @@
 #pragma mark - configuration
 
 - (void)setConditionForIndexPath:(NSIndexPath *)indexPath condition:(BOOL(^)(void))condition {
+	NSPredicate *predicate;
+	if (condition != NULL) {
+		predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+			return condition();
+		}];
+	}
+	
+	[self setConditionForIndexPath:indexPath predicate:predicate evaluationObject:self];
+}
+
+- (void)setConditionForIndexPath:(NSIndexPath *)indexPath predicate:(NSPredicate *)predicate evaluationObject:(id)object {
+	if (predicate == nil) {
+		[self removeConditionForIndexPath:indexPath descendant:NO];
+		return;
+	}
+	NSParameterAssert(object);
+	if (object == nil) {
+		return;
+	}
+	
 	NSUInteger indexes[indexPath.length];
 	[indexPath getIndexes:indexes];
 	
-	[self.root setConditionForIndexes:indexes depth:indexPath.length condition:condition];
+	[self.root setConditionForIndexes:indexes depth:indexPath.length predicate:predicate evaluationObject:object];
 }
 
 - (void)removeConditionForIndexPath:(NSIndexPath *)indexPath descendant:(BOOL)descendant {
