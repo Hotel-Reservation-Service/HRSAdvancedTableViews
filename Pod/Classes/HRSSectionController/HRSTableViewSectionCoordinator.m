@@ -141,7 +141,9 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 - (void)setSectionController:(NSArray *)sectionController animated:(BOOL)animated {
 	NSArray *oldSectionController = _sectionController;
 	for (id<HRSTableViewSectionController> ctrl in oldSectionController) {
-		[ctrl setCoordinator:nil];
+		if ([sectionController containsObject:ctrl] == NO) {
+			[ctrl setCoordinator:nil];
+		}
 	}
 
 	sectionController = [sectionController copy];
