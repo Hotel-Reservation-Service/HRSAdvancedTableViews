@@ -139,37 +139,52 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 }
 
 - (void)setSectionController:(NSArray *)sectionController animated:(BOOL)animated {
+	// setup local variables for operations and ensure we don't operate on or
+	// store a mutable array.
 	NSArray *oldSectionController = _sectionController;
-	for (id<HRSTableViewSectionController> ctrl in oldSectionController) {
-		if ([sectionController containsObject:ctrl] == NO) {
-			[ctrl setCoordinator:nil];
-		}
-	}
-
-	sectionController = [sectionController copy];
+	NSArray *newSectionController = [sectionController copy];
 	
-	if ([sectionController count] != [[NSSet setWithArray:sectionController] count]) {
+	// build sets for upcoming operations
+	NSSet *oldSectionControllerSet = [NSSet setWithArray:oldSectionController];
+	NSSet *newSectionControllerSet = [NSSet setWithArray:newSectionController];
+	
+	// ensure we are not using the same section controller twice
+	// we simply check if the number of unique objects (the ones in the set) are
+	// the same as the number of objects in the array.
+	if (newSectionController.count != newSectionControllerSet.count) {
 		[NSException raise:NSInternalInconsistencyException format:@"Using the same section controller instance twice is disallowed."];
 	}
 	
-	for (id<HRSTableViewSectionController> ctrl in sectionController) {
-		if ([oldSectionController containsObject:ctrl] == NO) {
-			[ctrl setCoordinator:self];
-			if (self.tableView) {
-				if ([ctrl respondsToSelector:@selector(tableViewDidChange:)]) {
-					[ctrl tableViewDidChange:[self tableViewForSectionController:ctrl]];
-				}
-			}
+	// build diff sets for controllers to be removed and to be added
+	NSMutableSet *removeSectionControllerSet = [oldSectionControllerSet mutableCopy];
+	[removeSectionControllerSet minusSet:newSectionControllerSet];
+	
+	NSMutableSet *addSectionControllerSet = [newSectionControllerSet mutableCopy];
+	[addSectionControllerSet minusSet:oldSectionControllerSet];
+	
+	for (id<HRSTableViewSectionController> ctrl in removeSectionControllerSet) {
+		[ctrl setCoordinator:nil];
+		 // unlink the table view if we previously linked one
+		if (self.tableView && [ctrl respondsToSelector:@selector(tableViewDidChange:)]) {
+			[ctrl tableViewDidChange:nil];
+		}
+	}
+	
+	for (id<HRSTableViewSectionController> ctrl in addSectionControllerSet) {
+		[ctrl setCoordinator:self];
+		// link the table view if there is one assigned to the coordinator
+		if (self.tableView && [ctrl respondsToSelector:@selector(tableViewDidChange:)]) {
+			[ctrl tableViewDidChange:[self tableViewForSectionController:ctrl]];
 		}
 	}
 	
 	if (animated) {
 		[self.tableView beginUpdates];
-		_sectionController = sectionController;
-		[self _animateFromSections:oldSectionController toSections:sectionController];
+		_sectionController = newSectionController;
+		[self _animateFromSections:oldSectionController toSections:newSectionController];
 		[self.tableView endUpdates];
 	} else {
-		_sectionController = sectionController;
+		_sectionController = newSectionController;
 		[self.tableView reloadData];
 	}
 }
