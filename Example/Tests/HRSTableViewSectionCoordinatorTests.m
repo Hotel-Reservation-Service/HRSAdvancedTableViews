@@ -165,4 +165,22 @@
 	expect(tableIndexPath.section).to.equal(1);
 }
 
+/**
+ This was a bug that occured, when a section controller that already was
+ attached to the coordinator was set a second time inside `setSectionController:`
+ or `setSectionController:animated:`. In this case, the section controller that
+ has been attached before, didn't had a coordinator attached to it afterwards.
+ */
+- (void)testSectionControllerHasCoordinatorAfterResetIt {
+	NSArray *sectionController = @[ [HRSTableViewSectionController new] ];
+	
+	[self.sut setSectionController:sectionController];
+	
+	expect([sectionController.firstObject coordinator]).to.equal(self.sut);
+	
+	[self.sut setSectionController:sectionController];
+	
+	expect([sectionController.firstObject coordinator]).to.equal(self.sut);
+}
+
 @end
