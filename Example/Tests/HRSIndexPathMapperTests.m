@@ -130,4 +130,12 @@
 	expect([foundIndexPath indexAtPosition:1]).to.equal(0);
 }
 
+- (void)testMappingNilIndexPath {
+	NSIndexPath *nilIndexPath = [self.sut dynamicIndexPathForStaticIndexPath:nil];
+	expect(nilIndexPath).to.beNil();
+	
+	nilIndexPath = [self.sut staticIndexPathForDynamicIndexPath:nil];
+	expect(nilIndexPath).to.beNil();
+}
+
 @end

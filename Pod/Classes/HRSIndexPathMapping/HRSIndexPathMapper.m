@@ -77,6 +77,10 @@
 #pragma mark - mapping
 
 - (NSIndexPath *)dynamicIndexPathForStaticIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath == nil) {
+		return nil;
+	}
+	
 	NSUInteger indexes[indexPath.length];
 	[indexPath getIndexes:indexes];
 	
@@ -87,6 +91,10 @@
 }
 
 - (NSIndexPath *)staticIndexPathForDynamicIndexPath:(NSIndexPath *)indexPath {
+	if (indexPath == nil) {
+		return nil;
+	}
+	
 	NSUInteger indexes[indexPath.length];
 	[indexPath getIndexes:indexes];
 	
