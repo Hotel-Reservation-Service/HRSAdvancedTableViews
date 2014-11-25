@@ -1,6 +1,6 @@
 # HRSAdvancedTableViews
 
-[![CI Status](http://img.shields.io/travis/Hotel-Reservation-Service/HRSAdvancedTableViews.svg?style=flat-square)](https://travis-ci.org/Hotel-Reservation-Service/HRSAdvancedTableViews)
+[![CI Status](http://img.shields.io/travis/Hotel-Reservation-Service/HRSAdvancedTableViews/develop.svg?style=flat-square)](https://travis-ci.org/Hotel-Reservation-Service/HRSAdvancedTableViews)
 
 [![License](https://img.shields.io/cocoapods/l/HRSAdvancedTableViews.svg?style=flat-square)](http://cocoadocs.org/docsets/HRSAdvancedTableViews)
 [![Platform](https://img.shields.io/cocoapods/p/HRSAdvancedTableViews.svg?style=flat-square)](http://cocoadocs.org/docsets/HRSAdvancedTableViews)

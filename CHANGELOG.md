@@ -2,6 +2,10 @@
 
 The versioning in this project is based on [Semantic Versioning](http://semver.org).
 
+## v0.2.1
+- Fix an issue where passing nil as the index path to `dynamicIndexPathForStaticIndexPath:` or `staticIndexPathForDynamicIndexPath:` returned an index path instead of `nil`.
+- Fix an issue where calling `setSectionController:` more than once with the same instance of a section controller resulted in the section controller's coordinator becoming `nil`.
+
 ## v0.2.0
 Add `NSPredicate` support for the HRS Index Path Mapping module. You can now easily specify conditions based on `NSPredicate`.
 
