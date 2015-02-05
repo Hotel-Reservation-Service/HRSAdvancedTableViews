@@ -14,6 +14,11 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *  SectionController objects being managed by the SectionCoordinator might be interested
+ *  in events originating from sibling section controllers so they can observe these notifications
+ */
+FOUNDATION_EXPORT NSString *const HRSSectionControllerDidSelectRowNotification;
 
 @protocol HRSTableViewSectionController;
 
