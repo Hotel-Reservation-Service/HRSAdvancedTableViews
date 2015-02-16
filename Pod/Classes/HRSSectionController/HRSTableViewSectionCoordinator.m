@@ -122,6 +122,8 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 	// remove association if present
 	UITableView *tableView = self.tableView;
 	if (tableView) {
+        tableView.dataSource = nil;
+        tableView.delegate = nil;
 		objc_setAssociatedObject(tableView, CoordinatorTableViewLink, nil, OBJC_ASSOCIATION_ASSIGN);
 	}
 }
