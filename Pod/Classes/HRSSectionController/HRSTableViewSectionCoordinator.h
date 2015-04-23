@@ -50,8 +50,30 @@
  However this hook should never be used to manipulate the table view directly
  and without the knowledge of the coordinator. If you try such a thing, it is
  very likely that strange things will happen!
+ 
+ 
+ # Delegate and Data Source
+ 
+ @warning The HRSTableViewSectionCoordinator can be used as the delegate and
+          data source of a table view for backwards compatibility. You should
+          never set the delegate and data source of a table view to be the
+          section coordinator yourself. Instead use the `setTableView:` method
+          to let the section coordinator handle the work. In a later release,
+          the section coordinator will no longer be the delegate and data source
+          of the table view itself.
  */
 @interface HRSTableViewSectionCoordinator : UIResponder <UITableViewDelegate, UITableViewDataSource>
+
+/**
+ The transformer class to be used by the coordinator. This class must be of kind
+ `HRSTableViewSectionTransformer`.
+ 
+ This class is used as the actual delegate and data source of the table view
+ that then internally triggers the forwarding to the section controllers.
+ 
+ @return A class of kind `HRSTableViewSectionTransformer`
+ */
++ (Class)transformerClass;
 
 /**
  The list of section controllers that are managed by the coordinator.

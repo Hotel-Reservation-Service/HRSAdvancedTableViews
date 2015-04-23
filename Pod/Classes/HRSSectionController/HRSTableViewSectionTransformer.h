@@ -12,10 +12,23 @@
 //	limitations under the License.
 //
 
-#import "HRSTableViewSectionCoordinator.h"
+#import <UIKit/UIKit.h>
 
+#define HRSSectionControllerTransformer(sel, ...) [HRSTableViewSectionTransformer registerTransformer:@selector(sel) arguments:__VA_ARGS__, NSNotFound]
 
-@interface HRSTableViewSectionCoordinator (TransformerSupport)
+@class HRSTableViewSectionCoordinator;
+@interface HRSTableViewSectionTransformer : NSObject <UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, weak, readonly) HRSTableViewSectionCoordinator *coordinator;
+
++ (instancetype)transformerWithSectionCoordinator:(HRSTableViewSectionCoordinator *)coordinator;
+
+- (instancetype)initWithSectionCoordinator:(HRSTableViewSectionCoordinator *)coordinator NS_DESIGNATED_INITIALIZER;
+
+// unavailable:
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
+
 
 /**
  Register a transformer for the table view proxy.
@@ -49,19 +62,19 @@
  following call:
  
  ````
- [HRSTableViewSectionCoordinator registerTransformer:@selector(tableView:willSelectRowAtIndexPath:)
-                                           arguments:0, 2, NSNotFound];
+ [HRSTableViewSectionTransformer registerTransformer:@selector(tableView:willSelectRowAtIndexPath:)
+ arguments:0, 2, NSNotFound];
  ````
  
  @discussion There is a macro called `HRSSectionControllerTransformer(sel, ...)`
-             for easier configuration that does not need to be terminated by
-             `NSNotFound` and that does not need the `@selector()` wrapper. You
-             might want to use this! The above example would then look like this:
-             `HRSSectionControllerTransformer(tableView:willSelectRowAtIndexPath:, 0, 2)`
+ for easier configuration that does not need to be terminated by
+ `NSNotFound` and that does not need the `@selector()` wrapper. You
+ might want to use this! The above example would then look like this:
+ `HRSSectionControllerTransformer(tableView:willSelectRowAtIndexPath:, 0, 2)`
  
  @note This method is only needed when subclassing `UITableView` or extending
-	   the table view delegate or data source protocol. All default methods are
-       already hooked up in the coordinator itself!
+ the table view delegate or data source protocol. All default methods are
+ already hooked up in the coordinator itself!
  
  @param selector The selector of the method to transform
  @param arg      The arguments to be transformed, **followed by `NSNotFound`**
