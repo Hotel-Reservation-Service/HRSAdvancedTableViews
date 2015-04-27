@@ -25,7 +25,9 @@
 
 @interface HRSTableViewSectionCoordinator ()
 
-@property (nonatomic, weak, readwrite) UITableView *tableView;
+@property (nonatomic,   weak, readwrite) UITableView *tableView;
+@property (nonatomic,   copy, readwrite) NSArray *formerSectionController;
+@property (nonatomic, strong, readwrite) NSMutableDictionary *formerSectionControllerDict;
 
 @end
 
@@ -129,7 +131,6 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 }
 
 
-
 #pragma mark - responder chain
 
 - (UIResponder *)nextResponder {
@@ -145,9 +146,11 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 }
 
 - (void)setSectionController:(NSArray *)sectionController animated:(BOOL)animated {
+    
 	// setup local variables for operations and ensure we don't operate on or
 	// store a mutable array.
 	NSArray *oldSectionController = _sectionController;
+    _formerSectionController = [_sectionController copy];
 	NSArray *newSectionController = [sectionController copy];
 	
 	// build sets for upcoming operations
@@ -167,7 +170,18 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 	
 	NSMutableSet *addSectionControllerSet = [newSectionControllerSet mutableCopy];
 	[addSectionControllerSet minusSet:oldSectionControllerSet];
-	
+
+    
+    self.formerSectionControllerDict = [NSMutableDictionary new];
+    
+    for (id<HRSTableViewSectionController> ctrl in removeSectionControllerSet) {
+
+        NSUInteger oldPos = [self.sectionController indexOfObject:ctrl];
+        if (oldPos != NSNotFound) {
+            [self.formerSectionControllerDict setObject:ctrl forKey:@(oldPos)];
+        }
+    }
+    
 	for (id<HRSTableViewSectionController> ctrl in removeSectionControllerSet) {
 		[ctrl setCoordinator:nil];
 		 // unlink the table view if we previously linked one
@@ -193,6 +207,7 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 		_sectionController = newSectionController;
 		[self.tableView reloadData];
 	}
+//    _formerSectionController = nil;
 }
 
 - (void)_animateFromSections:(NSArray *)oldSections toSections:(NSArray *)newSections {
@@ -260,6 +275,9 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 
 - (id<HRSTableViewSectionController>)sectionControllerForTableSection:(NSInteger)section {
 	id<HRSTableViewSectionController> controller = [self _sectionControllerForTableSection:section];
+    if (controller == nil) {
+        return nil;
+    }
 	_HRSTableViewSectionCoordinatorProxy *proxy = [_HRSTableViewSectionCoordinatorProxy reverseProxyWithController:controller tableView:self.tableView];
 	return (id<HRSTableViewSectionController>)proxy;
 }
@@ -315,7 +333,18 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 }
 
 - (id<HRSTableViewSectionController>)_sectionControllerForTableSection:(NSInteger)section {
-	return [self.sectionController objectAtIndex:section];
+
+    HRSTableViewSectionController *controller = nil;
+    
+    if (/*self.sectionControllerChangeDone ||*/ (self.formerSectionController.count > self.sectionController.count)) { // indicates removal
+        controller = [self.formerSectionControllerDict objectForKey:@(section)];
+//        NSLog(@"using __former__ %@", controller);
+    } else if (self.sectionController.count > section) {
+        controller = [self.sectionController objectAtIndex:section];
+//        NSLog(@"using current %@", controller);
+    }
+
+    return controller;
 }
 
 - (void)_tableViewDidChange {
@@ -437,10 +466,20 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
-	id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:indexPath.section];
+    id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:indexPath.section];
 	if ([sectionController respondsToSelector:_cmd]) {
 		[sectionController tableView:tableView didEndDisplayingCell:cell forRowAtIndexPath:indexPath];
 	}
+    
+    NSUInteger max = [tableView numberOfRowsInSection:indexPath.section];
+    NSUInteger row = indexPath.row+1;
+    
+    if (row == max) {
+        // will only work if just one section is changed ?!!
+        // TODO:count cells which ended displaying by checking against removed sections (removeSectionControllerSet) cell count
+        self.formerSectionController = nil;
+        self.formerSectionControllerDict = nil;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section {
