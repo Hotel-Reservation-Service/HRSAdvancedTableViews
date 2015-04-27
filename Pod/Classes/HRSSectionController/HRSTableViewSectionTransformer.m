@@ -21,7 +21,15 @@
 #import "HRSTableViewSectionController.h"
 
 
+/*
+ Because of the dynamic forwarding, we get a warning here, that we did not
+ implement necessary methods of UITableViewDelegate and UITableViewDataSource.
+ This can be ignored as they are all forwarded to the section coordinator anyway.
+ */
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wprotocol"
 @implementation HRSTableViewSectionTransformer
+#pragma clang diagnostic pop
 
 + (void)load {
     // register default transformers
