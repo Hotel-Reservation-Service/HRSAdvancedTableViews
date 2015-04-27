@@ -44,7 +44,9 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 - (void)dealloc {
 	// notify the section controller that the new table is now nil, in case they
 	// cached it.
-	self.sectionController = nil;
+    for (HRSTableViewSectionController *controller in self.sectionController) {
+        [controller tableViewDidChange:nil];
+    }
 	
 	// remove association if present
 	UITableView *tableView = self.tableView;
