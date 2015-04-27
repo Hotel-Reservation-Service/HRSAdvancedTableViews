@@ -53,19 +53,15 @@
                                            arguments:0, 2, NSNotFound];
  ````
  
- @discussion There is a macro called `HRSSectionControllerTransformer(sel, ...)`
-             for easier configuration that does not need to be terminated by
-             `NSNotFound` and that does not need the `@selector()` wrapper. You
-             might want to use this! The above example would then look like this:
-             `HRSSectionControllerTransformer(tableView:willSelectRowAtIndexPath:, 0, 2)`
- 
  @note This method is only needed when subclassing `UITableView` or extending
 	   the table view delegate or data source protocol. All default methods are
        already hooked up in the coordinator itself!
  
+ @deprecated Please use +[HRSTableViewSectionTransformer registerTransformer:arguments:] instead.
+ 
  @param selector The selector of the method to transform
  @param arg      The arguments to be transformed, **followed by `NSNotFound`**
  */
-+ (void)registerTransformer:(SEL)selector arguments:(NSUInteger)arg, ...;
++ (void)registerTransformer:(SEL)selector arguments:(NSUInteger)arg, ... DEPRECATED_ATTRIBUTE;
 
 @end

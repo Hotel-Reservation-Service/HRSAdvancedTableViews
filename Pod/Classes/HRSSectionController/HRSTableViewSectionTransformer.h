@@ -17,12 +17,51 @@
 #define HRSSectionControllerTransformer(sel, ...) [HRSTableViewSectionTransformer registerTransformer:@selector(sel) arguments:__VA_ARGS__, NSNotFound]
 
 @class HRSTableViewSectionCoordinator;
+
+/**
+ The table view section transformer is a class that controlls the actual
+ dispatching of the table view's delegate and data source methods to the
+ section that is interested in the specific call.
+ 
+ If you want to extend the table view's delegate or data source protocol, you
+ can either do so in a category of this class if you want to have a general,
+ app wide support, or you can create a subclass which deals with these methods.
+ 
+ # Subclassing
+ 
+ When creating a subclass of a `HRSTableViewSectionTransformer` you should also
+ override `HRSTableViewSectionCoordinator` and return your transformer subclass
+ in `+transformerClass`.
+ @see `+[HRSTableViewSectionCoordinator transformerClass]`
+ 
+ @note In the current implementation this class forwards all the delegate and
+       data source methods to the section coordinator. However, this will change
+       in an upcoming release and is only implemented that way for backwards
+       compatibility.
+ */
 @interface HRSTableViewSectionTransformer : NSObject <UITableViewDelegate, UITableViewDataSource>
 
+/**
+ The coordinator that is linked with the transformer.
+ */
 @property (nonatomic, weak, readonly) HRSTableViewSectionCoordinator *coordinator;
 
+/**
+ Creates a new section transformer linked with the passed in coordinator.
+ 
+ @param coordinator The coordinator to use for this transformer.
+ 
+ @return The newly initialized transformer
+ */
 + (instancetype)transformerWithSectionCoordinator:(HRSTableViewSectionCoordinator *)coordinator;
 
+/**
+ Creates a new section transformer linked with the passed in coordinator.
+ 
+ @param coordinator The coordinator to use for this transformer.
+ 
+ @return The newly initialized transformer
+ */
 - (instancetype)initWithSectionCoordinator:(HRSTableViewSectionCoordinator *)coordinator NS_DESIGNATED_INITIALIZER;
 
 // unavailable:

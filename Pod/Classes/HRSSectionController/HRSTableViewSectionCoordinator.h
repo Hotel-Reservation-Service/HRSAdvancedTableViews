@@ -71,6 +71,10 @@
  This class is used as the actual delegate and data source of the table view
  that then internally triggers the forwarding to the section controllers.
  
+ If you have create a subclass of `HRSTableViewSectionTransformer` you should
+ also override this method to return this class in you custom
+ `HRSTableViewSectionCoordinator`.
+ 
  @return A class of kind `HRSTableViewSectionTransformer`
  */
 + (Class)transformerClass;
