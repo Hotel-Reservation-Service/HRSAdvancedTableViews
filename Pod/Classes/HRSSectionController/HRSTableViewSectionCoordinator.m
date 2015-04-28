@@ -27,6 +27,8 @@
 
 @property (nonatomic,   weak, readwrite) UITableView *tableView;
 @property (nonatomic,   copy, readwrite) NSArray *formerSectionController;
+@property (nonatomic, assign, readwrite) NSUInteger removedSectionControllerCellsCount;
+@property (nonatomic, assign, readwrite) NSUInteger cellDidEndDisplayingCounter;
 @property (nonatomic, strong, readwrite) NSMutableDictionary *formerSectionControllerDict;
 
 @end
@@ -171,16 +173,21 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 	NSMutableSet *addSectionControllerSet = [newSectionControllerSet mutableCopy];
 	[addSectionControllerSet minusSet:oldSectionControllerSet];
 
-    
     self.formerSectionControllerDict = [NSMutableDictionary new];
+
+    NSUInteger removedCellsCount = 0;
     
     for (id<HRSTableViewSectionController> ctrl in removeSectionControllerSet) {
 
         NSUInteger oldPos = [self.sectionController indexOfObject:ctrl];
+        UITableView *ctrlTableView = [self tableViewForSectionController:ctrl];
+        removedCellsCount += [ctrl tableView:ctrlTableView numberOfRowsInSection:0];
+
         if (oldPos != NSNotFound) {
             [self.formerSectionControllerDict setObject:ctrl forKey:@(oldPos)];
         }
     }
+    self.removedSectionControllerCellsCount = removedCellsCount;
     
 	for (id<HRSTableViewSectionController> ctrl in removeSectionControllerSet) {
 		[ctrl setCoordinator:nil];
@@ -471,14 +478,13 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 		[sectionController tableView:tableView didEndDisplayingCell:cell forRowAtIndexPath:indexPath];
 	}
     
-    NSUInteger max = [tableView numberOfRowsInSection:indexPath.section];
-    NSUInteger row = indexPath.row+1;
-    
-    if (row == max) {
-        // will only work if just one section is changed ?!!
-        // TODO:count cells which ended displaying by checking against removed sections (removeSectionControllerSet) cell count
-        self.formerSectionController = nil;
-        self.formerSectionControllerDict = nil;
+    if (self.formerSectionController != nil) {
+        self.cellDidEndDisplayingCounter++;
+        
+        if (self.cellDidEndDisplayingCounter == self.removedSectionControllerCellsCount) {
+            self.formerSectionController = nil;
+            self.formerSectionControllerDict = nil;
+        }
     }
 }
 
