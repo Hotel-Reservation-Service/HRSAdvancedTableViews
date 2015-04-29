@@ -28,6 +28,9 @@
 
 @property (nonatomic, weak, readwrite) UITableView *tableView;
 @property (nonatomic, strong, readwrite) HRSTableViewSectionTransformer *transformer;
+@property (nonatomic, strong, readwrite) NSArray *formerSectionControllerArray;
+@property (nonatomic, assign, readwrite) NSUInteger removedSectionControllersCellsCount;
+@property (nonatomic, assign, readwrite) NSUInteger removedSectionControllersCellsDidEndDisplayingCounter;
 
 @end
 
@@ -83,6 +86,10 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 - (void)setSectionController:(NSArray *)sectionController animated:(BOOL)animated {
 	// setup local variables for operations and ensure we don't operate on or
 	// store a mutable array.
+    _formerSectionControllerArray = nil;
+    _removedSectionControllersCellsCount = 0;
+    _removedSectionControllersCellsDidEndDisplayingCounter = 0;
+    
 	NSArray *oldSectionController = _sectionController;
 	NSArray *newSectionController = [sectionController copy];
 	
@@ -104,7 +111,18 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 	NSMutableSet *addSectionControllerSet = [newSectionControllerSet mutableCopy];
 	[addSectionControllerSet minusSet:oldSectionControllerSet];
 	
+    /**
+     *  Save former section controller array
+     */
+    if ( removeSectionControllerSet.count > 0 ) {
+        _formerSectionControllerArray = [_sectionController copy];
+    }
+    
 	for (id<HRSTableViewSectionController> ctrl in removeSectionControllerSet) {
+        
+        UITableView *ctrlTableView = [self tableViewForSectionController:ctrl];
+        _removedSectionControllersCellsCount += [ctrl tableView:ctrlTableView numberOfRowsInSection:0];
+        
 		[ctrl setCoordinator:nil];
 		 // unlink the table view if we previously linked one
 		if (self.tableView && [ctrl respondsToSelector:@selector(tableViewDidChange:)]) {
@@ -254,7 +272,13 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 }
 
 - (id<HRSTableViewSectionController>)_sectionControllerForTableSection:(NSInteger)section {
-	return [self.sectionController objectAtIndex:section];
+    id<HRSTableViewSectionController> sectionController;
+    if (self.formerSectionControllerArray) {
+        sectionController = self.formerSectionControllerArray[section];
+    } else {
+        sectionController = self.sectionController[section];
+    }
+    return sectionController;
 }
 
 - (void)_tableViewDidChange {
@@ -376,10 +400,20 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
-	id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:indexPath.section];
+    id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:indexPath.section];
+
 	if ([sectionController respondsToSelector:_cmd]) {
 		[sectionController tableView:tableView didEndDisplayingCell:cell forRowAtIndexPath:indexPath];
 	}
+    
+    self.removedSectionControllersCellsDidEndDisplayingCounter++;
+    
+    /**
+     *  If all cells of removed sections are removed from the table view, stop using former sections controller as callback target
+     */
+    if (self.removedSectionControllersCellsDidEndDisplayingCounter == self.removedSectionControllersCellsCount) {
+        self.formerSectionControllerArray = nil;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section {
