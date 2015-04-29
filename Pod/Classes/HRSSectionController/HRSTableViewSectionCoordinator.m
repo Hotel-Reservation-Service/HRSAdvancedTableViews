@@ -19,6 +19,7 @@
 #import <objc/runtime.h>
 
 #import "HRSTableViewSectionController.h"
+#import "HRSTableViewSectionTransformer.h"
 
 #import "_HRSTableViewSectionCoordinatorProxy.h"
 
@@ -26,6 +27,7 @@
 @interface HRSTableViewSectionCoordinator ()
 
 @property (nonatomic, weak, readwrite) UITableView *tableView;
+@property (nonatomic, strong, readwrite) HRSTableViewSectionTransformer *transformer;
 
 @end
 
@@ -35,89 +37,16 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 
 @implementation HRSTableViewSectionCoordinator
 
-+ (void)load {
-	// register default transformers
-	
-	// UITableView
-	HRSSectionControllerTransformer(numberOfRowsInSection:, 1);
-	HRSSectionControllerTransformer(rectForSection:, 1);
-	HRSSectionControllerTransformer(rectForHeaderInSection:, 1);
-	HRSSectionControllerTransformer(rectForFooterInSection:, 1);
-	HRSSectionControllerTransformer(rectForRowAtIndexPath:, 1);
-	HRSSectionControllerTransformer(indexPathForRowAtPoint:, 0);
-	HRSSectionControllerTransformer(indexPathForCell:, 0);
-	HRSSectionControllerTransformer(indexPathsForRowsInRect:, 0);
-	HRSSectionControllerTransformer(cellForRowAtIndexPath:, 1);
-	HRSSectionControllerTransformer(indexPathsForVisibleRows, 0);
-	HRSSectionControllerTransformer(headerViewForSection:, 1);
-	HRSSectionControllerTransformer(footerViewForSection:, 1);
-	HRSSectionControllerTransformer(scrollToRowAtIndexPath:atScrollPosition:animated:, 1);
-	HRSSectionControllerTransformer(insertSections:withRowAnimation:, 1);
-	HRSSectionControllerTransformer(deleteSections:withRowAnimation:, 1);
-	HRSSectionControllerTransformer(reloadSections:withRowAnimation:, 1);
-	HRSSectionControllerTransformer(moveSection:toSection:, 1, 2);
-	HRSSectionControllerTransformer(insertRowsAtIndexPaths:withRowAnimation:, 1);
-	HRSSectionControllerTransformer(deleteRowsAtIndexPaths:withRowAnimation:, 1);
-	HRSSectionControllerTransformer(reloadRowsAtIndexPaths:withRowAnimation:, 1);
-	HRSSectionControllerTransformer(moveRowAtIndexPath:toIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(indexPathForSelectedRow, 0);
-	HRSSectionControllerTransformer(indexPathsForSelectedRows, 0);
-	HRSSectionControllerTransformer(selectRowAtIndexPath:animated:scrollPosition:, 1);
-	HRSSectionControllerTransformer(deselectRowAtIndexPath:animated:, 1);
-	HRSSectionControllerTransformer(dequeueReusableCellWithIdentifier:forIndexPath:, 2);
-	
-	// DataSource
-	HRSSectionControllerTransformer(tableView:numberOfRowsInSection:, 1, 2);
-	HRSSectionControllerTransformer(tableView:cellForRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(numberOfSectionsInTableView:, 1);
-	HRSSectionControllerTransformer(tableView:titleForHeaderInSection:, 1, 2);
-	HRSSectionControllerTransformer(tableView:titleForFooterInSection:, 1, 2);
-	HRSSectionControllerTransformer(tableView:canEditRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:canMoveRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:commitEditingStyle:forRowAtIndexPath:, 1, 3);
-	HRSSectionControllerTransformer(tableView:moveRowAtIndexPath:toIndexPath:, 1, 2, 3);
-	
-	// Delegate
-	HRSSectionControllerTransformer(tableView:willDisplayCell:forRowAtIndexPath:, 1, 3);
-	HRSSectionControllerTransformer(tableView:willDisplayHeaderView:forSection:, 1, 3);
-	HRSSectionControllerTransformer(tableView:willDisplayFooterView:forSection:, 1, 3);
-	HRSSectionControllerTransformer(tableView:didEndDisplayingCell:forRowAtIndexPath:, 1, 3);
-	HRSSectionControllerTransformer(tableView:didEndDisplayingHeaderView:forSection:, 1, 3);
-	HRSSectionControllerTransformer(tableView:didEndDisplayingFooterView:forSection:, 1, 3);
-	HRSSectionControllerTransformer(tableView:heightForRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:heightForHeaderInSection:, 1, 2);
-	HRSSectionControllerTransformer(tableView:heightForFooterInSection:, 1, 2);
-	HRSSectionControllerTransformer(tableView:estimatedHeightForRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:estimatedHeightForHeaderInSection:, 1, 2);
-	HRSSectionControllerTransformer(tableView:estimatedHeightForFooterInSection:, 1, 2);
-	HRSSectionControllerTransformer(tableView:viewForHeaderInSection:, 1, 2);
-	HRSSectionControllerTransformer(tableView:viewForFooterInSection:, 1, 2);
-	HRSSectionControllerTransformer(tableView:accessoryTypeForRowWithIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:accessoryButtonTappedForRowWithIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:shouldHighlightRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:didHighlightRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:didUnhighlightRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:willSelectRowAtIndexPath:, 0, 1, 2);
-	HRSSectionControllerTransformer(tableView:willDeselectRowAtIndexPath:, 0, 1, 2);
-	HRSSectionControllerTransformer(tableView:didSelectRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:didDeselectRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:editingStyleForRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:titleForDeleteConfirmationButtonForRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:editActionsForRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:shouldIndentWhileEditingRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:willBeginEditingRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:didEndEditingRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:targetIndexPathForMoveFromRowAtIndexPath:toProposedIndexPath:, 0, 1, 2, 3);
-	HRSSectionControllerTransformer(tableView:indentationLevelForRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:shouldShowMenuForRowAtIndexPath:, 1, 2);
-	HRSSectionControllerTransformer(tableView:canPerformAction:forRowAtIndexPath:withSender:, 1, 3);
-	HRSSectionControllerTransformer(tableView:performAction:forRowAtIndexPath:withSender:, 1, 3);
++ (Class)transformerClass {
+    return [HRSTableViewSectionTransformer class];
 }
 
 - (void)dealloc {
 	// notify the section controller that the new table is now nil, in case they
 	// cached it.
-	self.sectionController = nil;
+    for (HRSTableViewSectionController *controller in self.sectionController) {
+        [controller tableViewDidChange:nil];
+    }
 	
 	// remove association if present
 	UITableView *tableView = self.tableView;
@@ -139,6 +68,13 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 
 
 #pragma mark - section controller handling
+
+- (void)configureTransformer {
+    HRSTableViewSectionTransformer *transformer = [[[self class] transformerClass] transformerWithSectionCoordinator:self];
+    self.tableView.delegate = transformer;
+    self.tableView.dataSource = transformer;
+    self.transformer = transformer;
+}
 
 - (void)setSectionController:(NSArray *)sectionController {
 	[self setSectionController:sectionController animated:NO];
@@ -187,10 +123,12 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 	if (animated) {
 		[self.tableView beginUpdates];
 		_sectionController = newSectionController;
+        [self configureTransformer];
 		[self _animateFromSections:oldSectionController toSections:newSectionController];
 		[self.tableView endUpdates];
 	} else {
 		_sectionController = newSectionController;
+        [self configureTransformer];
 		[self.tableView reloadData];
 	}
 }
@@ -307,6 +245,7 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 		objc_setAssociatedObject(tableView, CoordinatorTableViewLink, self, OBJC_ASSOCIATION_ASSIGN);
 		tableView.delegate = self;
 		tableView.dataSource = self;
+        [self configureTransformer];
 	}
 	
 	[self _tableViewDidChange];
@@ -801,6 +740,23 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 
 
 
+@implementation HRSTableViewSectionCoordinator (TransformerSupport)
+
++ (void)registerTransformer:(SEL)selector arguments:(NSUInteger)arg, ... {
+    NSMutableIndexSet *indexSet = [NSMutableIndexSet new];
+    va_list args;
+    va_start(args, arg);
+    for (NSUInteger index = arg; index != NSNotFound; index = va_arg(args, NSUInteger)) {
+        [indexSet addIndex:index];
+    }
+    va_end(args);
+    [_HRSTableViewSectionCoordinatorProxy registerSelector:selector arguments:indexSet];
+}
+
+@end
+
+
+
 @implementation HRSTableViewSectionCoordinator (IndexPathMapping)
 
 - (NSInteger)controllerSectionForTableViewSection:(NSInteger)tableViewSection withController:(id<HRSTableViewSectionController>)controller {
@@ -825,23 +781,6 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 	NSInteger section = [self tableViewSectionForControllerSection:controllerIndexPath.section withController:controller];
 	NSIndexPath *tableViewIndexPath = [NSIndexPath indexPathForRow:controllerIndexPath.row inSection:section];
 	return tableViewIndexPath;
-}
-
-@end
-
-
-
-@implementation HRSTableViewSectionCoordinator (TransformerSupport)
-
-+ (void)registerTransformer:(SEL)selector arguments:(NSUInteger)arg, ... {
-	NSMutableIndexSet *indexSet = [NSMutableIndexSet new];
-	va_list args;
-	va_start(args, arg);
-	for (NSUInteger index = arg; index != NSNotFound; index = va_arg(args, NSUInteger)) {
-		[indexSet addIndex:index];
-	}
-	va_end(args);
-	[_HRSTableViewSectionCoordinatorProxy registerSelector:selector arguments:indexSet];
 }
 
 @end
