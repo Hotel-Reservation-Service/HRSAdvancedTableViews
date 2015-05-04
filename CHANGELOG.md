@@ -2,6 +2,9 @@
 
 The versioning in this project is based on [Semantic Versioning](http://semver.org).
 
+## v0.2.4
+- Fix an issue that resulted in delegate methods not being called under rare circumstances. (See [\#13](https://github.com/Hotel-Reservation-Service/HRSAdvancedTableViews/issues/13) for more details)
+
 ## v0.2.3
 - Fix an issue that caused a crash when the `HRSTableViewSectionCoordinator`was dealloc'ed while the underlying table view was still scrolling.
 The coordinator failed to unregister itself from the table view (delegate & data source) on `-dealloc`, causing crashes (delegate and data source are kept as `unsafe_unretained` properties by the table view / scroll view).

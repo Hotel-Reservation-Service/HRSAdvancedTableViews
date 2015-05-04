@@ -14,3 +14,4 @@
 
 #import <HRSAdvancedTableViews/HRSTableViewSectionController.h>
 #import <HRSAdvancedTableViews/HRSTableViewSectionCoordinator.h>
+#import <HRSAdvancedTableViews/HRSTableViewSectionTransformer.h>
