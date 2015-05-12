@@ -192,12 +192,21 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 #pragma mark - proxying
 
 - (UITableView *)tableViewForSectionController:(id<HRSTableViewSectionController>)controller {
+    if (controller == nil || self.tableView == nil) {
+        return nil;
+    }
 	_HRSTableViewSectionCoordinatorProxy *proxy = [_HRSTableViewSectionCoordinatorProxy proxyWithController:controller tableView:self.tableView];
 	return (UITableView *)proxy;
 }
 
 - (id<HRSTableViewSectionController>)sectionControllerForTableSection:(NSInteger)section {
+    if (self.tableView == nil) {
+        return nil;
+    }
 	id<HRSTableViewSectionController> controller = [self _sectionControllerForTableSection:section];
+    if (controller == nil) {
+        return nil;
+    }
 	_HRSTableViewSectionCoordinatorProxy *proxy = [_HRSTableViewSectionCoordinatorProxy reverseProxyWithController:controller tableView:self.tableView];
 	return (id<HRSTableViewSectionController>)proxy;
 }
@@ -254,7 +263,11 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 }
 
 - (id<HRSTableViewSectionController>)_sectionControllerForTableSection:(NSInteger)section {
-	return [self.sectionController objectAtIndex:section];
+    if (self.sectionController.count > section) {
+        return [self.sectionController objectAtIndex:section];
+    } else {
+        return nil;
+    }
 }
 
 - (void)_tableViewDidChange {
