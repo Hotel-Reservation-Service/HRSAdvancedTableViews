@@ -47,4 +47,8 @@
 	}
 }
 
+- (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"did end displaying %@", indexPath);
+}
+
 @end

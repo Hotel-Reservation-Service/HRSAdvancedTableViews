@@ -22,6 +22,7 @@
 		79249A1D19EEA37700F6A95C /* HRSSimpleIndexPathMappingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79249A1C19EEA37700F6A95C /* HRSSimpleIndexPathMappingTableViewController.m */; };
 		79311C4319E820D100FC9751 /* HRSIndexPathMapperTableViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 79311C4219E820D100FC9751 /* HRSIndexPathMapperTableViewTests.m */; };
 		7933E6C31B01FA3000437C84 /* HRSTableViewSectionControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7933E6C21B01FA3000437C84 /* HRSTableViewSectionControllerTests.m */; };
+		7933E6C61B02470F00437C84 /* HRSSectionControllerDynamicDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7933E6C51B02470F00437C84 /* HRSSectionControllerDynamicDemoViewController.m */; };
 		797B586519EFC15500F09EA7 /* HRSTreeIndexPathMappingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 797B586419EFC15500F09EA7 /* HRSTreeIndexPathMappingTableViewController.m */; };
 		799D7C4F19DD723600D455C8 /* HRSTableViewSectionCoordinatorTableViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 799D7C4E19DD723600D455C8 /* HRSTableViewSectionCoordinatorTableViewTests.m */; };
 		79D8EA6819E2BBE800F56065 /* HRSSectionControllerDemoSectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79D8EA6719E2BBE800F56065 /* HRSSectionControllerDemoSectionController.m */; };
@@ -73,6 +74,8 @@
 		79249A1C19EEA37700F6A95C /* HRSSimpleIndexPathMappingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRSSimpleIndexPathMappingTableViewController.m; sourceTree = "<group>"; };
 		79311C4219E820D100FC9751 /* HRSIndexPathMapperTableViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRSIndexPathMapperTableViewTests.m; sourceTree = "<group>"; };
 		7933E6C21B01FA3000437C84 /* HRSTableViewSectionControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRSTableViewSectionControllerTests.m; sourceTree = "<group>"; };
+		7933E6C41B02470F00437C84 /* HRSSectionControllerDynamicDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRSSectionControllerDynamicDemoViewController.h; sourceTree = "<group>"; };
+		7933E6C51B02470F00437C84 /* HRSSectionControllerDynamicDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRSSectionControllerDynamicDemoViewController.m; sourceTree = "<group>"; };
 		797B586319EFC15500F09EA7 /* HRSTreeIndexPathMappingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRSTreeIndexPathMappingTableViewController.h; sourceTree = "<group>"; };
 		797B586419EFC15500F09EA7 /* HRSTreeIndexPathMappingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRSTreeIndexPathMappingTableViewController.m; sourceTree = "<group>"; };
 		799D7C4E19DD723600D455C8 /* HRSTableViewSectionCoordinatorTableViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRSTableViewSectionCoordinatorTableViewTests.m; sourceTree = "<group>"; };
@@ -152,6 +155,8 @@
 				79249A1719EE9F3600F6A95C /* HRSDemoListTableViewController.m */,
 				6003F5A5195388D20070C39A /* HRSSectionControllerDemoViewController.h */,
 				6003F5A6195388D20070C39A /* HRSSectionControllerDemoViewController.m */,
+				7933E6C41B02470F00437C84 /* HRSSectionControllerDynamicDemoViewController.h */,
+				7933E6C51B02470F00437C84 /* HRSSectionControllerDynamicDemoViewController.m */,
 				79D8EA6619E2BBE800F56065 /* HRSSectionControllerDemoSectionController.h */,
 				79D8EA6719E2BBE800F56065 /* HRSSectionControllerDemoSectionController.m */,
 				79249A1B19EEA37700F6A95C /* HRSSimpleIndexPathMappingTableViewController.h */,
@@ -382,6 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				79D8EA6819E2BBE800F56065 /* HRSSectionControllerDemoSectionController.m in Sources */,
+				7933E6C61B02470F00437C84 /* HRSSectionControllerDynamicDemoViewController.m in Sources */,
 				79249A1D19EEA37700F6A95C /* HRSSimpleIndexPathMappingTableViewController.m in Sources */,
 				6003F5A7195388D20070C39A /* HRSSectionControllerDemoViewController.m in Sources */,
 				797B586519EFC15500F09EA7 /* HRSTreeIndexPathMappingTableViewController.m in Sources */,
