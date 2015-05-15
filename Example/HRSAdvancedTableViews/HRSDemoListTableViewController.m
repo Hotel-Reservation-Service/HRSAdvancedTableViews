@@ -38,6 +38,7 @@ typedef NS_ENUM(NSUInteger, Demo) {
 						 // Section Controller
 						 @[
 							 @"HRSSectionControllerDemoViewController",
+                             @"HRSSectionControllerDynamicDemoViewController",
 							 ],
 						 
 						 // Index Path Mapping

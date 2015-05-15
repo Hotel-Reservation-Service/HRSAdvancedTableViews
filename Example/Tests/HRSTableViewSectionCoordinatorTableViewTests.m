@@ -22,7 +22,7 @@
 @interface HRSTableViewSectionCoordinator (Tests)
 
 - (UITableView *)tableView;
-- (id<HRSTableViewSectionController>)_sectionControllerForTableSection:(NSInteger)section;
+- (id<HRSTableViewSectionController>)_sectionControllerForTableSection:(NSInteger)section beforeTransition:(BOOL)beforeTransition;
 
 @end
 
@@ -72,7 +72,7 @@
 	[self.sut setSectionController:sectionController animated:NO];
 	
 	NSIndexPath *tableViewIndexPath = [NSIndexPath indexPathForRow:4 inSection:1];
-	id<HRSTableViewSectionController> controller = [self.sut _sectionControllerForTableSection:tableViewIndexPath.section];
+	id<HRSTableViewSectionController> controller = [self.sut _sectionControllerForTableSection:tableViewIndexPath.section beforeTransition:NO];
 	expect(controller).to.beIdenticalTo([sectionController lastObject]);
 }
 

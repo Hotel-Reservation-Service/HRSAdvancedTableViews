@@ -72,6 +72,14 @@ static NSMutableDictionary *transformer;
 	return self;
 }
 
+- (NSArray *)sectionControllers {
+    if (_sectionControllers) {
+        return _sectionControllers;
+    }
+    
+    return self.controller.coordinator.sectionController;
+}
+
 
 
 #pragma mark - forwarding
@@ -100,12 +108,16 @@ static NSMutableDictionary *transformer;
 	BOOL reverseLogic = reverse ^ self.reverseProxying;
 	
 	if ([object isKindOfClass:[NSIndexPath class]]) {
+        NSIndexPath *indexPath = object;
 		NSIndexPath *mappedIndexPath;
 		if (reverseLogic) {
-			mappedIndexPath = [self.controller.coordinator controllerIndexPathForTableViewIndexPath:object withController:self.controller];
+            mappedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
 			
 		} else {
-			mappedIndexPath = [self.controller.coordinator tableViewIndexPathForControllerIndexPath:object withController:self.controller];
+            NSInteger section = [self.sectionControllers indexOfObject:self.controller];
+            if (section != NSNotFound) {
+                mappedIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:section];
+            }
 		}
 		return mappedIndexPath;
 		
