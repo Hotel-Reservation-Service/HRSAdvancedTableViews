@@ -46,6 +46,20 @@
 @interface _HRSTableViewSectionCoordinatorProxy : NSProxy
 
 /**
+ This is the list of all section controllers that are currently displayed in the
+ table view.
+ 
+ The proxy uses this information to calculate the mapping of index pathes and
+ sections. The section controller associated to the proxy must be one element
+ of this array; otherwise, setting this array will raise an exception.
+ 
+ @note if you do not set this value, the proxy tries to determine the list of
+       available section controllers itself. This might not always be correct.
+       (see issue #16)
+ */
+@property (nonatomic, strong, readwrite) NSArray *sectionControllers;
+
+/**
  Register a new selector that participates in object mapping.
  
  The newly registered selector will immediately be taken into account by all

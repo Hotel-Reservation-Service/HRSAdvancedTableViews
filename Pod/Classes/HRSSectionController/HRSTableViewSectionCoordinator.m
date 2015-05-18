@@ -29,6 +29,8 @@
 @property (nonatomic, weak, readwrite) UITableView *tableView;
 @property (nonatomic, strong, readwrite) HRSTableViewSectionTransformer *transformer;
 
+@property (nonatomic, strong, readwrite) NSArray *oldSectionController; /// This is the list of old section controllers during a transition.
+
 @end
 
 
@@ -85,6 +87,8 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 	// store a mutable array.
 	NSArray *oldSectionController = _sectionController;
 	NSArray *newSectionController = [sectionController copy];
+    
+    self.oldSectionController = oldSectionController;
 	
 	// build sets for upcoming operations
 	NSSet *oldSectionControllerSet = [NSSet setWithArray:oldSectionController];
@@ -121,15 +125,34 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 	}
 	
 	if (animated) {
+        // use a transaction to be able to hook to the end of the table view
+        // animation. UITableView uses core animation, so this works reliably.
+        [CATransaction begin];
+        [CATransaction setCompletionBlock:^{
+            // this completion handler fires before the core animation callbacks,
+            // which will trigger the table view did end displaying callbacks,
+            // so we need to delay this ones more!
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self configureTransformer]; // delay this until here ensure a smooth transition
+                self.oldSectionController = nil;
+            });
+        }];
+        
 		[self.tableView beginUpdates];
 		_sectionController = newSectionController;
-        [self configureTransformer];
+        // if we are animating, we hold back the new transformer to guarantee a smooth animation
 		[self _animateFromSections:oldSectionController toSections:newSectionController];
 		[self.tableView endUpdates];
+        
+        [CATransaction commit];
+        
 	} else {
 		_sectionController = newSectionController;
         [self configureTransformer];
 		[self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{ // wait for the table view to relayout
+            self.oldSectionController = nil;
+        });
 	}
 }
 
@@ -192,13 +215,29 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 #pragma mark - proxying
 
 - (UITableView *)tableViewForSectionController:(id<HRSTableViewSectionController>)controller {
+    if (controller == nil || self.tableView == nil) {
+        return nil;
+    }
 	_HRSTableViewSectionCoordinatorProxy *proxy = [_HRSTableViewSectionCoordinatorProxy proxyWithController:controller tableView:self.tableView];
 	return (UITableView *)proxy;
 }
 
 - (id<HRSTableViewSectionController>)sectionControllerForTableSection:(NSInteger)section {
-	id<HRSTableViewSectionController> controller = [self _sectionControllerForTableSection:section];
+    return [self sectionControllerForTableSection:section beforeTransition:NO];
+}
+
+- (id<HRSTableViewSectionController>)sectionControllerForTableSection:(NSInteger)section beforeTransition:(BOOL)beforeTransition {
+    if (self.tableView == nil) {
+        return nil;
+    }
+	id<HRSTableViewSectionController> controller = [self _sectionControllerForTableSection:section beforeTransition:beforeTransition];
+    if (controller == nil) {
+        return nil;
+    }
 	_HRSTableViewSectionCoordinatorProxy *proxy = [_HRSTableViewSectionCoordinatorProxy reverseProxyWithController:controller tableView:self.tableView];
+    if (beforeTransition && self.oldSectionController) {
+        proxy.sectionControllers = self.oldSectionController;
+    }
 	return (id<HRSTableViewSectionController>)proxy;
 }
 
@@ -253,8 +292,13 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 	[tableView reloadData];
 }
 
-- (id<HRSTableViewSectionController>)_sectionControllerForTableSection:(NSInteger)section {
-	return [self.sectionController objectAtIndex:section];
+- (id<HRSTableViewSectionController>)_sectionControllerForTableSection:(NSInteger)section beforeTransition:(BOOL)beforeTransition {
+    NSArray *sectionController = (beforeTransition && self.oldSectionController ? self.oldSectionController : self.sectionController);
+    if (sectionController.count > section) {
+        return [sectionController objectAtIndex:section];
+    } else {
+        return nil;
+    }
 }
 
 - (void)_tableViewDidChange {
@@ -376,21 +420,21 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath*)indexPath {
-	id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:indexPath.section];
+	id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:indexPath.section beforeTransition:YES];
 	if ([sectionController respondsToSelector:_cmd]) {
 		[sectionController tableView:tableView didEndDisplayingCell:cell forRowAtIndexPath:indexPath];
 	}
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingHeaderView:(UIView *)view forSection:(NSInteger)section {
-	id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:section];
+	id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:section beforeTransition:YES];
 	if ([sectionController respondsToSelector:_cmd]) {
 		[sectionController tableView:tableView didEndDisplayingHeaderView:view forSection:section];
 	}
 }
 
 - (void)tableView:(UITableView *)tableView didEndDisplayingFooterView:(UIView *)view forSection:(NSInteger)section {
-	id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:section];
+	id<HRSTableViewSectionController> sectionController = [self sectionControllerForTableSection:section beforeTransition:YES];
 	if ([sectionController respondsToSelector:_cmd]) {
 		[sectionController tableView:tableView didEndDisplayingFooterView:view forSection:section];
 	}
