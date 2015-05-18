@@ -2,6 +2,9 @@
 
 The versioning in this project is based on [Semantic Versioning](http://semver.org).
 
+## v0.2.5
+- Fix an issue that resulted in a crash or miss directed method calls when resetting sections under rare circumstances (See [\#16](https://github.com/Hotel-Reservation-Service/HRSAdvancedTableViews/pull/18))
+
 ## v0.2.4
 - Fix an issue that resulted in delegate methods not being called under rare circumstances. (See [\#13](https://github.com/Hotel-Reservation-Service/HRSAdvancedTableViews/issues/13) for more details)
 
