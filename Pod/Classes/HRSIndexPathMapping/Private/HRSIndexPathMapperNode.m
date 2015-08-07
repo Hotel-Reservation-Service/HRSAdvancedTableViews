@@ -28,6 +28,11 @@
 
 @implementation HRSIndexPathMapperNode
 
+- (instancetype)init {
+    NSAssert(NO, @"You should always provide an index explicitly, so better use -initWithIndex:");
+    return [self initWithIndex:0];
+}
+
 - (instancetype)initWithIndex:(NSUInteger)index {
 	self = [super init];
 	if (self) {
