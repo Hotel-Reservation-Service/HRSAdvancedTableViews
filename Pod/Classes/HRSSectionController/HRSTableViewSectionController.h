@@ -72,7 +72,7 @@
  
  Its next responder is the section coordinator.
  */
-@interface HRSTableViewSectionController : UIResponder <HRSTableViewSectionController>
+@interface HRSTableViewSectionController : UIResponder <HRSTableViewSectionController, UITraitEnvironment>
 
 /**
  Called after the coordinator was assigned a new table view.

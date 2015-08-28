@@ -106,4 +106,20 @@
     expect(controllerOne.didEndDisplayingCellHitCount).to.beGreaterThan(0);
 }
 
+- (void)testSectionControllerUpdateTraitCollectionCallsTraitCollectionDidChange {
+    HRSTableViewSectionController *controller = [HRSTableViewSectionController new];
+    NSArray *sectionController = @[ controller ];
+    [self.sut setSectionController:sectionController animated:NO];
+    
+    UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithUserInterfaceIdiom:UIUserInterfaceIdiomPad];
+    
+    id mockedController = OCMPartialMock(controller);
+    [[mockedController expect] traitCollectionDidChange:OCMOCK_ANY];
+    
+    [self.sut updateTraitCollection:traitCollection];
+    
+    [mockedController verify];
+    [mockedController stopMocking];
+}
+
 @end

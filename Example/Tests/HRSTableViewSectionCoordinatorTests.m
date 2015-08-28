@@ -14,6 +14,7 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import <OCMock/OCMock.h>
 
 #import <HRSAdvancedTableViews/HRSSectionController.h>
 #import <HRSAdvancedTableViews/HRSTableViewSectionCoordinator+IndexPathMapping.h>
@@ -181,6 +182,30 @@
 	[self.sut setSectionController:sectionController];
 	
 	expect([sectionController.firstObject coordinator]).to.equal(self.sut);
+}
+
+- (void)testSectionCoordinatorForwardsTraitCollections {
+    NSArray *sectionController = @[ [HRSTableViewSectionController new], [HRSTableViewSectionController new], [HRSTableViewSectionController new] ];
+    [self.sut setSectionController:sectionController animated:NO];
+    
+    UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithUserInterfaceIdiom:UIUserInterfaceIdiomPad];
+    [self.sut updateTraitCollection:traitCollection];
+    
+    for (HRSTableViewSectionController *controller in self.sut.sectionController) {
+        expect(controller.traitCollection).to.equal(traitCollection);
+    }
+}
+
+- (void)testSectionCoordinatorUpdateTraitCollectionCallsTraitCollectionDidChange {
+    UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithUserInterfaceIdiom:UIUserInterfaceIdiomPad];
+    
+    id mockedSut = OCMPartialMock(self.sut);
+    [[mockedSut expect] traitCollectionDidChange:OCMOCK_ANY];
+    
+    [mockedSut updateTraitCollection:traitCollection];
+    
+    [mockedSut verify];
+    [mockedSut stopMocking];
 }
 
 @end
