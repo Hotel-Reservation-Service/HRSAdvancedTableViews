@@ -24,12 +24,21 @@
 #import "_HRSTableViewSectionCoordinatorProxy.h"
 
 
+@interface HRSTableViewSectionController (Private)
+
+- (void)_updateTraitCollectionIfNecessary;
+
+@end
+
+
 @interface HRSTableViewSectionCoordinator ()
 
 @property (nonatomic, weak, readwrite) UITableView *tableView;
 @property (nonatomic, strong, readwrite) HRSTableViewSectionTransformer *transformer;
 
 @property (nonatomic, strong, readwrite) NSArray *oldSectionController; /// This is the list of old section controllers during a transition.
+
+@property (nonatomic, strong, readwrite) UITraitCollection *traitCollection;
 
 @end
 
@@ -41,6 +50,14 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 
 + (Class)transformerClass {
     return [HRSTableViewSectionTransformer class];
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _traitCollection = [UITraitCollection new];
+    }
+    return self;
 }
 
 - (void)dealloc {
@@ -65,6 +82,31 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 
 - (UIResponder *)nextResponder {
 	return self.tableView;
+}
+
+
+
+#pragma mark - UITraitEnvironment
+
+- (void)updateTraitCollection:(UITraitCollection *)traitCollection {
+    UITraitCollection *previousTraitCollection = self.traitCollection;
+    if (previousTraitCollection != traitCollection && [traitCollection isEqual:previousTraitCollection] == NO) {
+        self.traitCollection = traitCollection;
+        [self _traitCollectionDidChange:previousTraitCollection];
+    }
+}
+
+- (void)_traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [self traitCollectionDidChange:previousTraitCollection];
+    for (id<HRSTableViewSectionController> sectionController in self.sectionController) {
+        if ([sectionController isKindOfClass:[HRSTableViewSectionController class]]) {
+            [(HRSTableViewSectionController *)sectionController _updateTraitCollectionIfNecessary];
+        }
+    }
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    // empty - used for subclassing
 }
 
 
