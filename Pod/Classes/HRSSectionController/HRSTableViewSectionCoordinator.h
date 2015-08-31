@@ -171,8 +171,8 @@
 - (id<HRSTableViewSectionController>)sectionControllerForTableSection:(NSInteger)section;
 
 /**
- Updates the trait collection that is passed to the section controllers to the
- passed in one.
+ Updates the trait collection with the given trait collection and passes the new
+ trait collection on to the coordinator's section controllers.
  
  If the trait collection passed in here is different from the current trait
  collection, the passed in one will become the current trait collection and a
