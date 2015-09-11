@@ -4,6 +4,7 @@ The versioning in this project is based on [Semantic Versioning](http://semver.o
 
 ## v0.3.0
 - Introduce trait collections in `HRSTableViewSectionCoordinator` and `HRSTableViewSectionController` to be able to adapt to different size classes.
+- Fix Xcode 7 GM designated initializer warnings.
 
 ## v0.2.5
 - Fix an issue that resulted in a crash or miss directed method calls when resetting sections under rare circumstances (See [\#16](https://github.com/Hotel-Reservation-Service/HRSAdvancedTableViews/pull/18))
