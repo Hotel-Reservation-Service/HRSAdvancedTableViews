@@ -11,6 +11,10 @@ The project is available under the Apache 2 license. Please see the LICENSE file
 
 
 ## Contributors
+
+### v0.3.0
+- Lutz Lameyer - [Override designated initializer of base class](https://github.com/Hotel-Reservation-Service/HRSAdvancedTableViews/pull/19)
+
 ### v0.2.3
 - Lutz Lameyer - [Fix an issue where the table view crashed in case the delegate was deallocated while the scroll view was still scrolling](https://github.com/Hotel-Reservation-Service/HRSAdvancedTableViews/pull/15)
 The list of contributors is updated with every new version tag that is added to the project.

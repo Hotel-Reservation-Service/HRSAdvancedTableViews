@@ -21,6 +21,8 @@
 
 @property (nonatomic, strong, readwrite) UITableView *tableView;
 
+@property (nonatomic, strong, readwrite) UITraitCollection *lastTraitCollection;
+
 @end
 
 
@@ -63,5 +65,25 @@
 #pragma mark - table view delegate
 
 
+
+#pragma mark - UITraitEnvironment
+
+- (void)_updateTraitCollectionIfNecessary {
+    UITraitCollection *traitCollection = self.traitCollection;
+    UITraitCollection *lastTraitCollection = self.lastTraitCollection;
+    if (lastTraitCollection != traitCollection && [traitCollection isEqual:lastTraitCollection] == NO) {
+        [self traitCollectionDidChange:lastTraitCollection];
+        self.lastTraitCollection = traitCollection;
+    }
+}
+
+- (UITraitCollection *)traitCollection {
+    UITraitCollection *parentTraitCollection = [self.coordinator traitCollection];
+    return parentTraitCollection;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    // empty - used for subclassing
+}
 
 @end

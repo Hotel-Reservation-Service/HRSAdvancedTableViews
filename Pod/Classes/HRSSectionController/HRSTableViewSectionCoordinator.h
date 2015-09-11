@@ -62,7 +62,7 @@
           the section coordinator will no longer be the delegate and data source
           of the table view itself.
  */
-@interface HRSTableViewSectionCoordinator : UIResponder <UITableViewDelegate, UITableViewDataSource>
+@interface HRSTableViewSectionCoordinator : UIResponder <UITableViewDelegate, UITableViewDataSource, UITraitEnvironment>
 
 /**
  The transformer class to be used by the coordinator. This class must be of kind
@@ -169,5 +169,21 @@
  @return a section controller proxy
  */
 - (id<HRSTableViewSectionController>)sectionControllerForTableSection:(NSInteger)section;
+
+/**
+ Updates the trait collection with the given trait collection and passes the new
+ trait collection on to the coordinator's section controllers.
+ 
+ If the trait collection passed in here is different from the current trait
+ collection, the passed in one will become the current trait collection and a
+ `traitCollectionDidChange:` method is posted on the receiver and all child
+ section controllers.
+ 
+ Typically you call this method inside your view controller's
+ `traitCollectionDidChange:` method.
+ 
+ @param traitCollection The new trait collection.
+ */
+- (void)updateTraitCollection:(UITraitCollection *)traitCollection;
 
 @end

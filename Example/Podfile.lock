@@ -1,11 +1,11 @@
 PODS:
-  - Expecta (1.0.0)
-  - HRSAdvancedTableViews (0.2.5):
-    - HRSAdvancedTableViews/HRSIndexPathMapping (= 0.2.5)
-    - HRSAdvancedTableViews/HRSSectionController (= 0.2.5)
-  - HRSAdvancedTableViews/HRSIndexPathMapping (0.2.5)
-  - HRSAdvancedTableViews/HRSSectionController (0.2.5)
-  - OCMock (3.1.2)
+  - Expecta (1.0.2)
+  - HRSAdvancedTableViews (0.3.0):
+    - HRSAdvancedTableViews/HRSIndexPathMapping (= 0.3.0)
+    - HRSAdvancedTableViews/HRSSectionController (= 0.3.0)
+  - HRSAdvancedTableViews/HRSIndexPathMapping (0.3.0)
+  - HRSAdvancedTableViews/HRSSectionController (0.3.0)
+  - OCMock (3.1.5)
 
 DEPENDENCIES:
   - Expecta
@@ -14,11 +14,11 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   HRSAdvancedTableViews:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
-  Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
-  HRSAdvancedTableViews: 6fe100bc3313c88abe78d72667d6b3cea975028c
-  OCMock: a10ea9f0a6e921651f96f78b6faee95ebc813b92
+  Expecta: 54e8a3530add08f4f0208c111355eda7cde74a53
+  HRSAdvancedTableViews: d6e7a310d5216c4ccb5709419cef7df612fce8d7
+  OCMock: 4c2925291f80407c3738dd1db14d21d0cc278864
 
-COCOAPODS: 0.36.0
+COCOAPODS: 0.38.2
