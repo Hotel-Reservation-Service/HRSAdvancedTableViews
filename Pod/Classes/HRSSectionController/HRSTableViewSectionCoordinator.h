@@ -88,6 +88,14 @@
 @property (nonatomic, copy, readwrite) NSArray /* id<HRSTableViewSectionController> */ *sectionController;
 
 /**
+ Sets the type of animation to be used for adding / deleting rows when the array
+ of sections is set anew by calling `setSectionController:animated:` with the
+ `animated`flag set to YES.
+ The default is `UITableViewRowAnimationNone`
+ */
+@property (nonatomic, assign, readwrite) UITableViewRowAnimation rowAnimation;
+
+ /**
  Sets the list of section controllers that are managed by the coordinator.
  
  The list contains all section controllers that are used for the table view

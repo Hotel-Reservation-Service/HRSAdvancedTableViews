@@ -182,7 +182,7 @@
 	
 	NSArray *newController = pool;
 	
-	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationNone];
 	
 	[self.sut setSectionController:newController animated:YES];
 	
@@ -202,7 +202,7 @@
 	
 	NSArray *newController = [pool subarrayWithRange:NSMakeRange(0, 5)];
 	
-	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationNone];
 	
 	[self.sut setSectionController:newController animated:YES];
 	
@@ -222,8 +222,8 @@
 	
 	NSArray *newController = @[ pool[0], pool[4], pool[5], pool[2], pool[3] ];
 	
-	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 2)] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, 2)] withRowAnimation:UITableViewRowAnimationNone];
 	
 	[self.sut setSectionController:newController animated:YES];
 	
@@ -241,8 +241,8 @@
 	
 	NSArray *newController = [self sectionControllerPool:3];
 	
-	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, oldController.count)] withRowAnimation:UITableViewRowAnimationAutomatic];
-	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, newController.count)] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, oldController.count)] withRowAnimation:UITableViewRowAnimationNone];
+	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, newController.count)] withRowAnimation:UITableViewRowAnimationNone];
 	
 	[self.sut setSectionController:newController animated:YES];
 	
@@ -262,7 +262,7 @@
 	
 	NSArray *newController = @[ pool[4], pool[0], pool[1], pool[2], pool[3] ];
 	
-	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 	
 	[self.sut setSectionController:newController animated:YES];
 	
@@ -282,7 +282,7 @@
 	
 	NSArray *newController = @[ pool[0], pool[1], pool[2], pool[3], pool[4] ];
 	
-	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[[[tableViewMock expect] andForwardToRealObject] insertSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationNone];
 	
 	[self.sut setSectionController:newController animated:YES];
 	
@@ -302,7 +302,7 @@
 	
 	NSArray *newController = @[ pool[0], pool[1], pool[2], pool[3] ];
 	
-	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 	
 	[self.sut setSectionController:newController animated:YES];
 	
@@ -322,7 +322,7 @@
 	
 	NSArray *newController = @[ pool[0], pool[1], pool[2], pool[3] ];
 	
-	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[[[tableViewMock expect] andForwardToRealObject] deleteSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationNone];
 	
 	[self.sut setSectionController:newController animated:YES];
 	

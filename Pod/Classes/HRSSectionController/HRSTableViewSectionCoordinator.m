@@ -55,6 +55,7 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _rowAnimation = UITableViewRowAnimationNone;
         _traitCollection = [UITraitCollection new];
     }
     return self;
@@ -248,8 +249,8 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 		}
 	}
 	
-	[self.tableView insertSections:insertIndex withRowAnimation:UITableViewRowAnimationAutomatic];
-	[self.tableView deleteSections:deleteIndex withRowAnimation:UITableViewRowAnimationAutomatic];
+	[self.tableView insertSections:insertIndex withRowAnimation:self.rowAnimation];
+	[self.tableView deleteSections:deleteIndex withRowAnimation:self.rowAnimation];
 }
 
 

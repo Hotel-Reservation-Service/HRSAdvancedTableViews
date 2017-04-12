@@ -2,8 +2,15 @@
 
 The versioning in this project is based on [Semantic Versioning](http://semver.org).
 
+## v0.3.1
+- Introduce a new property on `HRSTableViewSectionCoordinator` to make the row animation type configurable. The section coordinator uses animations
+  to add/remove sections from the table view in case `setSectionController:animated:` is called with the `animated` flag set to `YES`. The animation
+  type used to be always `UITableViewRowAnimationAutomatic`; now the type can be configured. Moreover, the default behavior changes with this version
+  insofar as the coordinator now uses `UITableViewRowAnimationNone` if no other type is explicitly defined.
+
 ## v0.3.0
 - Introduce trait collections in `HRSTableViewSectionCoordinator` and `HRSTableViewSectionController` to be able to adapt to different size classes.
+- Fix Xcode 7 GM designated initializer warnings.
 
 ## v0.2.5
 - Fix an issue that resulted in a crash or miss directed method calls when resetting sections under rare circumstances (See [\#16](https://github.com/Hotel-Reservation-Service/HRSAdvancedTableViews/pull/18))
