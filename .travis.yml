@@ -6,4 +6,4 @@ before_install:
   - gem install cocoapods -v '1.2.0'
   - cd Example && pod install && cd -
 script:
-- xcodebuild test -workspace 'Example/HRSAdvancedTableViews.xcworkspace' -scheme 'HRSAdvancedTableViews' -destination 'name=iPhone 6,OS=8.0'
+- xcodebuild test -workspace 'Example/HRSAdvancedTableViews.xcworkspace' -scheme 'HRSAdvancedTableViews' -destination 'name=iPhone 6,OS=8.1'
