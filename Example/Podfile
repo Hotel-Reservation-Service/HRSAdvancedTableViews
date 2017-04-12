@@ -1,10 +1,12 @@
+platform :ios, '8.0'
+
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'HRSAdvancedTableViews', :exclusive => true do
+target 'HRSAdvancedTableViews' do
   pod "HRSAdvancedTableViews", :path => "../"
 end
 
-target 'Tests', :exclusive => true do
+target 'Tests' do
   pod "HRSAdvancedTableViews", :path => "../"
 
   pod 'Expecta'
