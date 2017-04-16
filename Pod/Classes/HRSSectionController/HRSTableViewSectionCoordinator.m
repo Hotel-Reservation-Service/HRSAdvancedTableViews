@@ -23,6 +23,7 @@
 
 #import "_HRSTableViewSectionCoordinatorProxy.h"
 
+NSString *const HRSSectionControllerDidSelectRowNotification = @"HRSSectionControllerDidSelectRowNotification";
 
 @interface HRSTableViewSectionController (Private)
 
