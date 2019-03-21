@@ -12,15 +12,20 @@ DEPENDENCIES:
   - HRSAdvancedTableViews (from `../`)
   - OCMock
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Expecta
+    - OCMock
+
 EXTERNAL SOURCES:
   HRSAdvancedTableViews:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
-  HRSAdvancedTableViews: e77881f97ce5cde2556916ed095595ed8439b0a7
+  HRSAdvancedTableViews: f43f2de1517d17aa4fbf1638419296a17efffabd
   OCMock: f3f61e6eaa16038c30caa5798c5e49d3307b6f22
 
 PODFILE CHECKSUM: bed599d9cacd1435baa1c624e4605659708ebabe
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.5.3

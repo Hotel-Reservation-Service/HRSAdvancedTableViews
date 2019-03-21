@@ -715,7 +715,10 @@ static void *const CoordinatorTableViewLink = (void *)&CoordinatorTableViewLink;
 #pragma mark - scroll view delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	[[self.sectionController firstObject] scrollViewDidScroll:scrollView];
+    id<HRSTableViewSectionController> sectionController = [self.sectionController firstObject];
+    if ([sectionController respondsToSelector:_cmd]) {
+        [sectionController scrollViewDidScroll:scrollView];
+    }
 }
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
