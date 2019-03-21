@@ -2,6 +2,9 @@
 
 The versioning in this project is based on [Semantic Versioning](http://semver.org).
 
+## v0.3.2
+- Add a respondency check before forwarding a `- scrollViewDidScroll` call to a `HRSTableViewSectionController`. (See [\#25](https://github.com/Hotel-Reservation-Service/HRSAdvancedTableViews/pull/25))
+
 ## v0.3.1
 - Introduce a new property on `HRSTableViewSectionCoordinator` to make the row animation type configurable. The section coordinator uses animations
   to add/remove sections from the table view in case `setSectionController:animated:` is called with the `animated` flag set to `YES`. The animation
