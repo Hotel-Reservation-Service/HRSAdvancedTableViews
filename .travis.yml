@@ -1,9 +1,19 @@
 # reference: http://www.objc.io/issue-6/travis-ci.html
 
 language: objective-c
+osx_image: xcode10
+
+env:
+  matrix:
+    - SCHEME="HRSAdvancedTableViews Example"  DESTINATION_NAME="iPhone 5s"      DESTINATION_OS="8.1"
+    - SCHEME="HRSAdvancedTableViews Example"  DESTINATION_NAME="iPhone X"       DESTINATION_OS="12.0"
+
 before_install:
   - brew update # workaround for #2836
-  - gem install cocoapods -v '1.2.0'
-  - cd Example && pod install && cd -
+
+before_script:
+  - gem install cocoapods -v '1.5.3'
+  - cd Example && pod repo update && pod install && cd -
+
 script:
-- xcodebuild test -workspace 'Example/HRSAdvancedTableViews.xcworkspace' -scheme 'HRSAdvancedTableViews' -destination 'name=iPhone 6,OS=8.1'
+- xcodebuild test -workspace 'Example/HRSAdvancedTableViews.xcworkspace' -scheme "${SCHEME}" -destination "name=${DESTINATION_NAME},OS=${DESTINATION_OS}"
